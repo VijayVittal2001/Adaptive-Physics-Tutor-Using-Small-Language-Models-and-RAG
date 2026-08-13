@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Reverse Bias p-n Junction Diode - Step by Step Visual</title>
+<style>
+:root{
+  --bg:#020617;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;
+  --blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--pink:#fb7185;--red:#ef4444;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+  background:radial-gradient(circle at 10% 6%,rgba(239,68,68,.28),transparent 30%),
+             radial-gradient(circle at 90% 14%,rgba(37,99,235,.32),transparent 28%),
+             linear-gradient(135deg,#020617,#0f172a 58%,#111827);
+}
+header{
+  text-align:center;padding:24px 16px;background:rgba(2,6,23,.9);
+  border-bottom:1px solid rgba(148,163,184,.25);position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)
+}
+h1{margin:0;font-size:clamp(24px,4vw,44px)}
+p,li{line-height:1.7}
+.wrap{max-width:1320px;margin:auto;padding:20px}
+.card{
+  background:rgba(15,23,42,.94);border:1px solid rgba(148,163,184,.22);border-radius:28px;
+  padding:22px;margin:18px 0;box-shadow:0 24px 70px rgba(0,0,0,.38)
+}
+.main{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
+.visual{
+  min-height:735px;background:#020617;border:1px solid #334155;border-radius:26px;position:relative;overflow:hidden;
+  background-image:linear-gradient(rgba(56,189,248,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.07) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+.side{background:#020617;border:1px solid #334155;border-radius:26px;padding:20px}
+h2{color:#bae6fd;margin-top:0}
+h3{color:#c4b5fd}
+button{
+  border:0;border-radius:14px;padding:13px 16px;background:#1e293b;color:#fff;font-weight:900;cursor:pointer;margin:5px;
+  box-shadow:0 8px 20px rgba(0,0,0,.18)
+}
+button:hover{background:linear-gradient(90deg,#dc2626,#2563eb)}
+.region{
+  position:absolute;top:115px;height:430px;border-radius:22px;border:2px solid #334155;
+  display:flex;align-items:flex-start;justify-content:center;padding-top:18px;
+  font-size:30px;font-weight:1000;letter-spacing:1px;transition:.8s
+}
+.pRegion{left:55px;width:355px;background:linear-gradient(180deg,rgba(251,113,133,.27),rgba(76,5,25,.38));color:#fecdd3}
+.nRegion{right:55px;width:355px;background:linear-gradient(180deg,rgba(34,197,94,.25),rgba(5,46,22,.38));color:#bbf7d0}
+.region small{font-size:14px;letter-spacing:0;color:#cbd5e1}
+.depletion{
+  position:absolute;top:115px;bottom:190px;left:50%;transform:translateX(-50%);
+  width:120px;border-left:3px dashed #facc15;border-right:3px dashed #facc15;
+  background:repeating-linear-gradient(90deg,rgba(148,163,184,.20),rgba(148,163,184,.20) 10px,rgba(148,163,184,.09) 10px,rgba(148,163,184,.09) 20px);
+  z-index:6;transition:1s;border-radius:14px
+}
+.depletionLabel{
+  position:absolute;left:50%;top:560px;transform:translateX(-50%);background:#111827;border:1px solid #facc15;color:#fef08a;
+  border-radius:999px;padding:10px 14px;font-weight:1000;z-index:15
+}
+.battery{
+  position:absolute;left:110px;right:110px;bottom:50px;height:78px;border-radius:22px;background:#111827;border:2px solid #334155;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;padding:0 35px;font-size:22px;font-weight:1000
+}
+.plus{color:#fb7185}.minus{color:#93c5fd}
+.wire{position:absolute;background:#64748b;z-index:18}
+.w1{left:85px;bottom:88px;width:28px;height:260px}.w2{right:85px;bottom:88px;width:28px;height:260px}
+.w3{left:85px;right:85px;bottom:88px;height:28px}
+.carrier{
+  position:absolute;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:1000;z-index:14;
+  transition:1.05s cubic-bezier(.2,.8,.2,1)
+}
+.hole{border:3px dashed #fb7185;color:#fb7185;background:rgba(251,113,133,.12);box-shadow:0 0 20px rgba(251,113,133,.85)}
+.electron{background:radial-gradient(circle at 30% 30%,#fff,#38bdf8 38%,#1d4ed8);color:#082f49;box-shadow:0 0 20px rgba(56,189,248,.9)}
+.minority{opacity:.8;transform:scale(.82)}
+.moveAwayLeft{animation:awayLeft 2.2s linear infinite}
+.moveAwayRight{animation:awayRight 2.2s linear infinite}
+@keyframes awayLeft{from{transform:translateX(0)}to{transform:translateX(-170px)}}
+@keyframes awayRight{from{transform:translateX(0)}to{transform:translateX(170px)}}
+.arrow{
+  position:absolute;padding:8px 12px;border-radius:999px;font-weight:1000;display:none;z-index:25;
+}
+.reverse{background:#7f1d1d;color:#fecaca;border:1px solid #ef4444;box-shadow:0 0 20px rgba(239,68,68,.65)}
+.drift{background:#0c4a6e;color:#bae6fd;border:1px solid #38bdf8;box-shadow:0 0 20px rgba(56,189,248,.65)}
+.barrier{
+  position:absolute;left:50%;top:30px;transform:translateX(-50%);background:#422006;color:#fef08a;border:1px solid #facc15;
+  padding:12px 18px;border-radius:16px;font-weight:1000;display:block;z-index:20;box-shadow:0 0 22px rgba(250,204,21,.55)
+}
+.lamp{
+  position:absolute;left:50%;bottom:142px;transform:translateX(-50%);width:82px;height:82px;border-radius:50%;
+  border:4px solid #475569;background:#111827;display:flex;align-items:center;justify-content:center;font-size:42px;z-index:22
+}
+.lamp.dim{background:radial-gradient(circle,#dbeafe,#38bdf8 25%,#111827 55%);box-shadow:0 0 18px rgba(56,189,248,.35)}
+.cross{
+  position:absolute;left:50%;top:300px;transform:translate(-50%,-50%);font-size:85px;color:#ef4444;text-shadow:0 0 22px #ef4444;display:none;z-index:35
+}
+.story{
+  background:#082f49;border-left:5px solid #38bdf8;border-radius:16px;padding:16px;margin-top:14px;font-size:17px
+}
+.stepNo{font-size:14px;color:#94a3b8;font-weight:900}
+.bigText{font-size:25px;font-weight:1000;color:#67e8f9;margin:8px 0}
+.flowBox{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.box{background:#111827;border:1px solid #334155;border-radius:18px;padding:14px}
+.formula{font-size:23px;font-weight:1000;color:#fef08a;text-align:center;padding:14px;border-radius:16px;background:#422006;margin:12px 0}
+.timeline{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.dot{padding:8px 10px;border-radius:999px;background:#1e293b;color:#94a3b8;font-weight:900;cursor:pointer}
+.dot.active{background:#dc2626;color:white}
+.progress{height:11px;background:#1e293b;border-radius:999px;overflow:hidden;margin:12px 0}
+.progressFill{height:100%;width:12.5%;background:linear-gradient(90deg,#38bdf8,#ef4444,#facc15);transition:.4s}
+.exam{background:linear-gradient(135deg,#1e1b4b,#0f172a);border-left:5px solid #38bdf8}
+.table{width:100%;border-collapse:collapse;margin-top:10px}
+.table th,.table td{border:1px solid #334155;padding:12px;text-align:left}
+.table th{background:#1e293b;color:#bae6fd}
+@media(max-width:960px){.main,.flowBox{grid-template-columns:1fr}.visual{min-height:735px}.pRegion,.nRegion{width:43%}.pRegion{left:20px}.nRegion{right:20px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Reverse Bias Diode: Step-by-Step Visual</h1>
+  <p style="color:#94a3b8;margin:8px 0 0">p-side to negative, n-side to positive → depletion layer widens → current almost blocked</p>
+</header>
+
+<div class="wrap">
+<section class="card main">
+  <div class="visual" id="visual">
+    <div class="barrier" id="barrier">Barrier Potential V₀</div>
+    <div class="region pRegion">p-side<br><small>connected to − battery</small></div>
+    <div class="region nRegion">n-side<br><small>connected to + battery</small></div>
+    <div class="depletion" id="depletion"></div>
+    <div class="depletionLabel" id="depletionLabel">Depletion region</div>
+
+    <div class="wire w1"></div><div class="wire w2"></div><div class="wire w3"></div>
+    <div class="lamp" id="lamp">💡</div>
+    <div class="battery"><span class="minus">− Battery terminal to p-side</span><span class="plus">+ Battery terminal to n-side</span></div>
+
+    <div class="arrow reverse" id="holeAway" style="left:180px;top:245px">holes pulled away ←</div>
+    <div class="arrow reverse" id="electronAway" style="right:160px;top:385px">electrons pulled away →</div>
+    <div class="arrow drift" id="minorityDrift" style="left:50%;top:602px;transform:translateX(-50%)">tiny reverse saturation current due to minority carriers</div>
+    <div class="cross" id="cross">✕</div>
+  </div>
+
+  <div class="side">
+    <div class="stepNo" id="stepNo">STEP 1 OF 7</div>
+    <div class="bigText" id="title">Diode Before Reverse Bias</div>
+    <div class="timeline" id="timeline"></div>
+    <div class="progress"><div class="progressFill" id="progressFill"></div></div>
+
+    <div class="controls">
+      <button onclick="prevStep()">⬅ Previous</button>
+      <button onclick="nextStep()">Next ➡</button>
+      <button onclick="autoPlay()">▶ Auto Play</button>
+      <button onclick="resetAll()">🔄 Reset</button>
+    </div>
+
+    <div class="story">
+      <h3>What is happening?</h3>
+      <p id="what"></p>
+      <h3>Why is it happening?</h3>
+      <p id="why"></p>
+      <h3>Exam point</h3>
+      <p id="exam"></p>
+    </div>
+
+    <div class="flowBox">
+      <div class="box"><b>Depletion Width</b><div class="bigText" id="depStat">Normal</div></div>
+      <div class="box"><b>Current</b><div class="bigText" id="curStat">Zero</div></div>
+    </div>
+
+    <div class="formula" id="formula">No external voltage</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Simple Theory</h2>
+  <p>A p-n junction diode is said to be in <b>reverse bias</b> when the p-side is connected to the negative terminal of the battery and the n-side is connected to the positive terminal.</p>
+  <p>The applied voltage supports the built-in barrier potential. Because of this, the effective barrier height increases and the depletion region becomes wider.</p>
+  <p>Majority carriers are pulled away from the junction, so they cannot cross the junction easily. Hence, current is almost zero. Only a very small reverse saturation current flows due to minority carriers.</p>
+</section>
+
+<section class="card exam">
+  <h2>Board Exam Answer</h2>
+  <p>When the p-side of a p-n junction diode is connected to the negative terminal of the battery and the n-side is connected to the positive terminal, the diode is said to be reverse biased.</p>
+  <p>In reverse bias, the applied voltage is in the same direction as the barrier potential. Hence, the barrier height increases and the depletion region becomes wider. Majority carriers are pulled away from the junction and cannot cross it. Therefore, the diffusion current is greatly reduced.</p>
+  <p>Only a very small reverse current flows due to minority carriers. This current is almost independent of voltage until breakdown voltage is reached.</p>
+  <div class="formula">Effective barrier = V₀ + V</div>
+  <table class="table">
+    <tr><th>Point</th><th>Reverse Bias</th></tr>
+    <tr><td>Connection</td><td>p-side to negative terminal, n-side to positive terminal</td></tr>
+    <tr><td>Barrier potential</td><td>Increases</td></tr>
+    <tr><td>Depletion width</td><td>Increases</td></tr>
+    <tr><td>Resistance</td><td>Very high</td></tr>
+    <tr><td>Current</td><td>Very small reverse saturation current</td></tr>
+  </table>
+</section>
+</div>
+
+<script>
+const visual=document.getElementById('visual');
+let step=1,timer=null,items=[];
+const holes=[[140,190],[205,260],[150,355],[255,445]];
+const electrons=[[645,190],[580,260],[680,355],[570,445]];
+
+function add(cls,txt,x,y,id){
+  const el=document.createElement('div');
+  el.className='carrier '+cls; el.textContent=txt; el.style.left=x+'px'; el.style.top=y+'px';
+  if(id) el.id=id; visual.appendChild(el); items.push(el); return el;
+}
+function base(){
+  holes.forEach((p,i)=>add('hole','h⁺',p[0],p[1],'h'+i));
+  electrons.forEach((p,i)=>add('electron','e⁻',p[0],p[1],'e'+i));
+}
+function buildTimeline(){
+  timeline.innerHTML='';
+  for(let i=1;i<=7;i++){
+    const d=document.createElement('div'); d.className='dot'; d.id='dot'+i; d.textContent=i;
+    d.onclick=()=>{step=i;renderStep()}; timeline.appendChild(d);
+  }
+}
+function clean(){
+  items.forEach(i=>i.remove()); items=[]; base();
+  depletion.style.width='140px'; depletionLabel.textContent='Depletion region';
+  barrier.textContent='Barrier Potential V₀';
+  holeAway.style.display='none'; electronAway.style.display='none'; minorityDrift.style.display='none';
+  lamp.classList.remove('dim'); cross.style.display='none';
+  depStat.textContent='Normal'; curStat.textContent='Zero';
+}
+function renderStep(){
+  clean();
+  document.querySelectorAll('.dot').forEach(d=>d.classList.remove('active'));
+  document.getElementById('dot'+step).classList.add('active');
+  stepNo.textContent='STEP '+step+' OF 7';
+  progressFill.style.width=(step/7*100)+'%';
+
+  if(step===1){
+    title.textContent='Diode Before Reverse Bias';
+    what.textContent='The diode has p-side, n-side and a normal depletion region at the junction.';
+    why.textContent='At equilibrium, diffusion and drift currents balance each other.';
+    exam.textContent='Without external voltage, no net current flows.';
+    formula.textContent='No external voltage';
+  }
+  if(step===2){
+    title.textContent='Battery is Connected in Reverse Bias';
+    what.textContent='Negative terminal is connected to p-side and positive terminal is connected to n-side.';
+    why.textContent='This connection pulls majority carriers away from the junction.';
+    exam.textContent='Reverse bias: p-side to negative terminal and n-side to positive terminal.';
+    formula.textContent='p → −, n → +';
+  }
+  if(step===3){
+    depletion.style.width='210px'; depStat.textContent='Increased';
+    barrier.textContent='Barrier height increases';
+    title.textContent='Applied Voltage Supports Barrier';
+    what.textContent='The external battery voltage acts in the same direction as the built-in barrier potential.';
+    why.textContent='Because both voltages support each other, the effective barrier height becomes larger.';
+    exam.textContent='In reverse bias, effective barrier height is V₀ + V.';
+    formula.textContent='Effective barrier = V₀ + V';
+  }
+  if(step===4){
+    depletion.style.width='285px'; depStat.textContent='Wide';
+    barrier.textContent='Depletion layer widens';
+    title.textContent='Depletion Region Widens';
+    what.textContent='The depletion layer becomes wider as reverse voltage is applied.';
+    why.textContent='Majority carriers are pulled away from the junction, leaving more uncovered fixed ions.';
+    exam.textContent='In reverse bias, depletion region width increases.';
+    formula.textContent='Depletion width ↑';
+  }
+  if(step===5){
+    depletion.style.width='340px'; depStat.textContent='Very wide';
+    h0.style.left='70px'; h1.style.left='115px'; e0.style.left='735px'; e1.style.left='700px';
+    h2.classList.add('moveAwayLeft'); e2.classList.add('moveAwayRight');
+    holeAway.style.display='block'; electronAway.style.display='block'; cross.style.display='block';
+    curStat.textContent='Blocked';
+    title.textContent='Majority Carriers Move Away';
+    what.textContent='Holes in p-side move away from the junction. Electrons in n-side also move away from the junction.';
+    why.textContent='Negative battery terminal attracts holes away from the junction, and positive terminal attracts electrons away.';
+    exam.textContent='Majority carriers cannot cross the junction in reverse bias.';
+    formula.textContent='Majority carriers pulled away';
+  }
+  if(step===6){
+    depletion.style.width='360px'; depStat.textContent='Very wide';
+    h0.style.left='70px'; h1.style.left='115px'; e0.style.left='735px'; e1.style.left='700px';
+    holeAway.style.display='block'; electronAway.style.display='block'; cross.style.display='block';
+    minorityDrift.style.display='block'; lamp.classList.add('dim');
+    curStat.textContent='Tiny';
+    add('electron minority','e⁻',350,245,'me'); add('hole minority','h⁺',450,380,'mh');
+    title.textContent='Only Tiny Minority Carrier Current';
+    what.textContent='A very small current flows due to minority carriers being swept across the junction.';
+    why.textContent='Minority carriers are very few in number, so the reverse current is very small.';
+    exam.textContent='Reverse saturation current is due to minority carriers.';
+    formula.textContent='Very small reverse current';
+  }
+  if(step===7){
+    depletion.style.width='370px'; depStat.textContent='Maximum';
+    holeAway.style.display='block'; electronAway.style.display='block'; cross.style.display='block'; minorityDrift.style.display='block';
+    lamp.classList.add('dim'); curStat.textContent='Almost zero';
+    barrier.textContent='Diode blocks current';
+    title.textContent='Final: Diode Blocks Current';
+    what.textContent='The diode behaves like an open switch for majority carriers. Current is almost zero.';
+    why.textContent='The wide depletion layer and large barrier prevent majority carrier flow.';
+    exam.textContent='Reverse biased diode offers very high resistance and allows only very small reverse current.';
+    formula.textContent='Reverse bias → high resistance';
+  }
+}
+function nextStep(){step=step<7?step+1:7;renderStep()}
+function prevStep(){step=step>1?step-1:1;renderStep()}
+function resetAll(){clearInterval(timer);step=1;renderStep()}
+function autoPlay(){
+  clearInterval(timer);step=1;renderStep();
+  timer=setInterval(()=>{if(step>=7){clearInterval(timer)}else{step++;renderStep()}},3100);
+}
+buildTimeline();renderStep();
+</script>
+</body>
+</html>

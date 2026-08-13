@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>V-I Characteristics of p-n Junction Diode</title>
+<style>
+:root{--bg:#020617;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#ef4444;--pink:#fb7185}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% 6%,rgba(56,189,248,.25),transparent 30%),radial-gradient(circle at 90% 14%,rgba(239,68,68,.25),transparent 28%),linear-gradient(135deg,#020617,#0f172a 58%,#111827)}
+header{text-align:center;padding:24px 16px;background:rgba(2,6,23,.9);border-bottom:1px solid rgba(148,163,184,.25);position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)}
+h1{margin:0;font-size:clamp(24px,4vw,44px)} p,li{line-height:1.7}
+.wrap{max-width:1320px;margin:auto;padding:20px}
+.card{background:rgba(15,23,42,.94);border:1px solid rgba(148,163,184,.22);border-radius:28px;padding:22px;margin:18px 0;box-shadow:0 24px 70px rgba(0,0,0,.38)}
+.main{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
+.visual{min-height:735px;background:#020617;border:1px solid #334155;border-radius:26px;position:relative;overflow:hidden}
+.side{background:#020617;border:1px solid #334155;border-radius:26px;padding:20px}
+h2{color:#bae6fd;margin-top:0} h3{color:#c4b5fd}
+button{border:0;border-radius:14px;padding:13px 16px;background:#1e293b;color:#fff;font-weight:900;cursor:pointer;margin:5px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+button:hover{background:linear-gradient(90deg,#0284c7,#2563eb)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+svg{width:100%;height:100%}
+.axis{stroke:#94a3b8;stroke-width:3}
+.grid{stroke:#334155;stroke-width:1}
+.curveF{fill:none;stroke:#22c55e;stroke-width:6;stroke-linecap:round;filter:drop-shadow(0 0 8px #22c55e)}
+.curveR{fill:none;stroke:#fb7185;stroke-width:5;stroke-linecap:round;filter:drop-shadow(0 0 8px #fb7185)}
+.point{fill:#facc15;stroke:#fff;stroke-width:3;filter:drop-shadow(0 0 10px #facc15)}
+.label{fill:#e5e7eb;font-size:16px;font-weight:800}
+.small{fill:#94a3b8;font-size:13px}
+.zone{opacity:.16}
+.story{background:#082f49;border-left:5px solid #38bdf8;border-radius:16px;padding:16px;margin-top:14px;font-size:17px}
+.stepNo{font-size:14px;color:#94a3b8;font-weight:900}
+.bigText{font-size:25px;font-weight:1000;color:#67e8f9;margin:8px 0}
+.flowBox{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.box{background:#111827;border:1px solid #334155;border-radius:18px;padding:14px}
+.formula{font-size:23px;font-weight:1000;color:#fef08a;text-align:center;padding:14px;border-radius:16px;background:#422006;margin:12px 0}
+.timeline{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.dot{padding:8px 10px;border-radius:999px;background:#1e293b;color:#94a3b8;font-weight:900;cursor:pointer}
+.dot.active{background:#0284c7;color:white}
+.progress{height:11px;background:#1e293b;border-radius:999px;overflow:hidden;margin:12px 0}
+.progressFill{height:100%;width:12.5%;background:linear-gradient(90deg,#fb7185,#38bdf8,#22c55e);transition:.4s}
+.sliderBox{background:#111827;border:1px solid #334155;border-radius:18px;padding:14px;margin-top:14px}
+input[type=range]{width:100%;accent-color:#38bdf8}
+.exam{background:linear-gradient(135deg,#1e1b4b,#0f172a);border-left:5px solid #38bdf8}
+.table{width:100%;border-collapse:collapse;margin-top:10px}
+.table th,.table td{border:1px solid #334155;padding:12px;text-align:left}
+.table th{background:#1e293b;color:#bae6fd}
+.badge{display:inline-block;padding:7px 10px;border-radius:999px;background:#1e293b;color:#dbeafe;font-size:13px;font-weight:900;margin:4px}
+@media(max-width:960px){.main,.flowBox{grid-template-columns:1fr}.visual{min-height:735px}}
+</style>
+</head>
+<body>
+<header>
+<h1>V-I Characteristics of p-n Junction Diode</h1>
+<p style="color:#94a3b8;margin:8px 0 0">Forward region, cut-in voltage, reverse saturation current and breakdown — step-by-step visual</p>
+</header>
+
+<div class="wrap">
+<section class="card main">
+<div class="visual">
+<svg viewBox="0 0 820 735">
+  <rect x="430" y="80" width="320" height="250" fill="#22c55e" class="zone"/>
+  <rect x="70" y="385" width="330" height="220" fill="#fb7185" class="zone"/>
+  <line x1="80" y1="360" x2="760" y2="360" class="axis"/>
+  <line x1="410" y1="70" x2="410" y2="650" class="axis"/>
+  <text x="742" y="345" class="label">V</text>
+  <text x="424" y="86" class="label">I</text>
+  <text x="520" y="105" class="small">Forward bias region</text>
+  <text x="100" y="585" class="small">Reverse bias region</text>
+  <line x1="520" y1="350" x2="520" y2="370" stroke="#facc15" stroke-width="4"/>
+  <text x="492" y="395" class="small">0.7 V Si</text>
+  <line x1="180" y1="350" x2="180" y2="370" stroke="#fb7185" stroke-width="4"/>
+  <text x="130" y="340" class="small">Breakdown</text>
+
+  <path d="M410 360 C450 358, 490 356, 520 350 C555 342, 590 285, 635 190 C665 125, 705 92, 742 80" class="curveF" id="forwardCurve"/>
+  <path d="M410 360 C350 365, 280 370, 215 375 C195 380, 185 450, 178 585" class="curveR" id="reverseCurve"/>
+  <circle cx="410" cy="360" r="0" class="point" id="point"/>
+  <text x="430" y="36" class="label" id="graphTitle">No external voltage</text>
+  <text x="430" y="58" class="small" id="graphSub">Diode current is zero at origin.</text>
+</svg>
+</div>
+
+<div class="side">
+<div class="stepNo" id="stepNo">STEP 1 OF 8</div>
+<div class="bigText" id="title">Origin: No Bias</div>
+<div class="timeline" id="timeline"></div>
+<div class="progress"><div class="progressFill" id="progressFill"></div></div>
+<div class="controls">
+<button onclick="prevStep()">⬅ Previous</button>
+<button onclick="nextStep()">Next ➡</button>
+<button onclick="autoPlay()">▶ Auto Play</button>
+<button onclick="resetAll()">🔄 Reset</button>
+</div>
+
+<div class="story">
+<h3>What is happening?</h3><p id="what"></p>
+<h3>Why?</h3><p id="why"></p>
+<h3>Exam point</h3><p id="exam"></p>
+</div>
+
+<div class="sliderBox">
+<h3>Try voltage manually</h3>
+<input type="range" min="-100" max="100" value="0" oninput="manualV(this.value)">
+<p id="manualText">Voltage = 0 V, Current = 0</p>
+</div>
+
+<div class="flowBox">
+<div class="box"><b>Bias</b><div class="bigText" id="biasStat">None</div></div>
+<div class="box"><b>Current</b><div class="bigText" id="curStat">0</div></div>
+</div>
+<div class="formula" id="formula">At V = 0, I = 0</div>
+</div>
+</section>
+
+<section class="card">
+<h2>Simple Theory</h2>
+<p>The V-I characteristics of a diode show how current changes when voltage across the diode is changed.</p>
+<p>In <b>forward bias</b>, current is very small at first. After cut-in voltage, current increases rapidly. For silicon diode cut-in voltage is about <b>0.7 V</b>, and for germanium diode it is about <b>0.2 V</b>.</p>
+<p>In <b>reverse bias</b>, current is very small and almost constant. This is called <b>reverse saturation current</b>. At very high reverse voltage, breakdown occurs and current increases sharply.</p>
+</section>
+
+<section class="card exam">
+<h2>Board Exam Answer</h2>
+<p>The V-I characteristic of a p-n junction diode is the graph between voltage across the diode and current through the diode.</p>
+<p>In forward bias, the current is very small until the applied voltage reaches a certain value called threshold voltage or cut-in voltage. After this voltage, the current increases rapidly. The cut-in voltage is about 0.7 V for silicon and 0.2 V for germanium.</p>
+<p>In reverse bias, the current is very small and almost independent of applied voltage. This current is called reverse saturation current. At breakdown voltage, reverse current increases sharply.</p>
+<table class="table">
+<tr><th>Region</th><th>Behaviour</th></tr>
+<tr><td>Forward bias before cut-in</td><td>Very small current</td></tr>
+<tr><td>Forward bias after cut-in</td><td>Current increases rapidly</td></tr>
+<tr><td>Reverse bias</td><td>Small reverse saturation current</td></tr>
+<tr><td>Breakdown region</td><td>Reverse current increases sharply</td></tr>
+</table>
+</section>
+</div>
+
+<script>
+let step=1,timer=null;
+const data=[
+ {x:410,y:360,b:'None',c:'0',f:'At V = 0, I = 0',t:'Origin: No Bias',w:'The diode is at origin. No external voltage is applied and current is zero.',why:'Without applied voltage, there is no external push for carriers.',e:'At V = 0, diode current is zero.',g:'No external voltage',s:'Diode current is zero at origin.'},
+ {x:455,y:358,b:'Small forward',c:'Very small',f:'Forward voltage starts',t:'Small Forward Voltage',w:'A small positive voltage is applied in forward bias.',why:'The barrier is only slightly reduced, so only a few carriers cross.',e:'Before cut-in voltage, forward current is very small.',g:'Small forward bias',s:'Current is still very small.'},
+ {x:520,y:350,b:'Forward',c:'Starts rising',f:'Cut-in voltage reached',t:'Cut-in / Threshold Voltage',w:'The voltage reaches cut-in value. For silicon it is about 0.7 V.',why:'The barrier becomes low enough for many majority carriers to cross.',e:'Threshold voltage is about 0.7 V for Si and 0.2 V for Ge.',g:'Cut-in voltage',s:'Current starts increasing noticeably.'},
+ {x:635,y:190,b:'Forward',c:'Large',f:'After cut-in: current ↑ fast',t:'Rapid Forward Current',w:'After cut-in voltage, a small increase in voltage gives a large increase in current.',why:'Many majority carriers cross the junction easily.',e:'Forward biased diode has low resistance after cut-in voltage.',g:'Forward conduction',s:'Current rises rapidly.'},
+ {x:350,y:365,b:'Reverse',c:'Tiny',f:'Reverse saturation current',t:'Reverse Bias Starts',w:'Negative voltage is applied. Reverse current is very small.',why:'Majority carriers are blocked; only minority carriers contribute.',e:'Reverse current is due to minority carriers.',g:'Reverse bias',s:'Small reverse current flows.'},
+ {x:250,y:372,b:'Reverse',c:'Almost constant',f:'I ≈ reverse saturation current',t:'Reverse Saturation Region',w:'Reverse current remains almost constant even if reverse voltage increases.',why:'The current is limited by the number of minority carriers.',e:'Reverse saturation current is almost independent of reverse voltage.',g:'Reverse saturation current',s:'Current remains almost constant.'},
+ {x:180,y:520,b:'Breakdown',c:'Sharp increase',f:'At Vbr, current increases sharply',t:'Breakdown Voltage',w:'At high reverse voltage, breakdown occurs and reverse current increases suddenly.',why:'Strong electric field creates many carriers and current rises sharply.',e:'At breakdown voltage, reverse current increases rapidly.',g:'Breakdown region',s:'Reverse current increases sharply.'},
+ {x:520,y:350,b:'Summary',c:'Depends on bias',f:'Forward conducts, reverse blocks',t:'Final Summary',w:'The diode allows large current in forward bias and blocks current in reverse bias.',why:'This one-way behaviour is used for rectification.',e:'Diode is used as rectifier because it conducts mainly in one direction.',g:'Final V-I characteristic',s:'Forward large current, reverse tiny current until breakdown.'}
+];
+function buildTimeline(){
+ timeline.innerHTML='';
+ for(let i=1;i<=8;i++){let d=document.createElement('div');d.className='dot';d.id='dot'+i;d.textContent=i;d.onclick=()=>{step=i;renderStep()};timeline.appendChild(d);}
+}
+function renderStep(){
+ let d=data[step-1];
+ document.querySelectorAll('.dot').forEach(x=>x.classList.remove('active'));document.getElementById('dot'+step).classList.add('active');
+ stepNo.textContent='STEP '+step+' OF 8'; progressFill.style.width=(step/8*100)+'%';
+ title.textContent=d.t; what.textContent=d.w; why.textContent=d.why; exam.textContent=d.e;
+ biasStat.textContent=d.b; curStat.textContent=d.c; formula.textContent=d.f;
+ point.setAttribute('cx',d.x); point.setAttribute('cy',d.y); point.setAttribute('r',9);
+ graphTitle.textContent=d.g; graphSub.textContent=d.s;
+}
+function manualV(v){
+ let x=410+Number(v)*3;
+ let y=360;
+ let txt='';
+ if(v>0 && v<45){y=360-Number(v)*0.2; txt='Small forward bias: current is very small.'}
+ else if(v>=45){y=350-Math.pow((v-45),1.35)*1.4; if(y<80)y=80; txt='After cut-in voltage: current increases rapidly.'}
+ else if(v<0 && v>-75){y=365+Math.abs(v)*0.12; txt='Reverse bias: very small reverse saturation current.'}
+ else if(v<=-75){y=410+Math.pow(Math.abs(v)-75,1.55)*1.6; if(y>610)y=610; txt='Breakdown region: reverse current increases sharply.'}
+ else txt='Voltage = 0 V, Current = 0';
+ if(x<80)x=80;if(x>760)x=760;
+ point.setAttribute('cx',x); point.setAttribute('cy',y); point.setAttribute('r',9);
+ manualText.textContent='Voltage slider: '+v+' | '+txt;
+}
+function nextStep(){step=step<8?step+1:8;renderStep()}
+function prevStep(){step=step>1?step-1:1;renderStep()}
+function resetAll(){clearInterval(timer);step=1;renderStep()}
+function autoPlay(){clearInterval(timer);step=1;renderStep();timer=setInterval(()=>{if(step>=8){clearInterval(timer)}else{step++;renderStep()}},3000)}
+buildTimeline();renderStep();
+</script>
+</body>
+</html>

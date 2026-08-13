@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Energy Band Theory - Fully Interactive Simulator</title>
+<style>
+:root{
+  --bg:#07111f; --card:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#9ca3af;
+  --blue:#38bdf8; --green:#22c55e; --yellow:#facc15; --red:#ef4444; --purple:#a78bfa;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:
+  radial-gradient(circle at top left,#12385f,transparent 35%),
+  linear-gradient(135deg,#020617,#0f172a 55%,#111827);
+  color:var(--text);min-height:100vh;
+}
+header{text-align:center;padding:26px 18px;border-bottom:1px solid #334155;background:rgba(2,6,23,.82);backdrop-filter:blur(10px);position:sticky;top:0;z-index:10}
+h1{margin:0;font-size:clamp(25px,4vw,44px)}
+p{line-height:1.65}
+.wrap{max-width:1250px;margin:auto;padding:20px}
+.card{background:rgba(15,23,42,.9);border:1px solid rgba(148,163,184,.22);border-radius:24px;padding:22px;margin:18px 0;box-shadow:0 22px 55px rgba(0,0,0,.3)}
+h2{color:#bae6fd;margin-top:0}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+button{border:0;border-radius:14px;padding:12px 15px;background:#1e293b;color:#fff;font-weight:800;cursor:pointer}
+button:hover,button.active{background:linear-gradient(90deg,#0284c7,#2563eb)}
+.stage{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
+.sim{
+  min-height:560px;background:#020617;border:1px solid #334155;border-radius:22px;position:relative;overflow:hidden;padding:20px;
+}
+.side{background:#020617;border:1px solid #334155;border-radius:22px;padding:20px}
+.band{position:absolute;left:72px;right:72px;height:96px;border-radius:18px;border:2px solid #475569;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;letter-spacing:.3px}
+.cb{top:85px;background:linear-gradient(90deg,#1d4ed8,#2563eb)}
+.vb{bottom:105px;background:linear-gradient(90deg,#7c2d12,#92400e)}
+.gapZone{position:absolute;left:72px;right:72px;top:181px;bottom:201px;border-left:2px dashed #facc15;border-right:2px dashed #facc15;display:flex;align-items:center;justify-content:center;color:#fde68a;text-align:center;font-weight:900;font-size:22px;transition:.35s}
+.electron{
+  width:36px;height:36px;border-radius:50%;position:absolute;background:radial-gradient(circle at 30% 30%,#fff,#38bdf8 38%,#1d4ed8);
+  display:flex;align-items:center;justify-content:center;color:#082f49;font-weight:900;box-shadow:0 0 18px #38bdf8;cursor:pointer;transition:1s;
+}
+.hole{
+  width:34px;height:34px;border-radius:50%;position:absolute;border:3px dashed #facc15;color:#facc15;
+  display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 14px rgba(250,204,21,.7);display:none;
+}
+.photon{
+  position:absolute;font-size:38px;left:25px;top:310px;display:none;animation:photon 1.1s linear forwards;
+}
+@keyframes photon{from{left:25px;opacity:1}to{left:47%;opacity:.2}}
+.jump{transform:translateY(-235px)}
+.free{animation:freeMove 2.2s linear infinite}
+@keyframes freeMove{from{left:72px}to{left:calc(100% - 105px)}}
+.label{position:absolute;padding:8px 11px;background:#111827;border:1px solid #334155;border-radius:999px;color:#dbeafe;font-size:13px;font-weight:800;cursor:pointer}
+.label:hover{border-color:#38bdf8;background:#0c4a6e}
+.conductivityMeter{height:28px;border-radius:999px;background:#1e293b;overflow:hidden;border:1px solid #334155;margin:10px 0}
+.fill{height:100%;width:50%;background:linear-gradient(90deg,#ef4444,#facc15,#22c55e);border-radius:999px;transition:.4s}
+input[type=range]{width:100%;accent-color:#38bdf8}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.box{background:#111827;border:1px solid #334155;border-radius:16px;padding:13px}
+.big{font-size:24px;font-weight:900;color:#67e8f9}
+.story{font-size:17px;background:#082f49;border-left:5px solid #38bdf8;border-radius:16px;padding:15px;margin-top:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.mini{background:#020617;border:1px solid #334155;border-radius:18px;padding:16px;cursor:pointer;transition:.25s}
+.mini:hover{transform:translateY(-5px);border-color:#38bdf8}
+.quiz{background:#020617;border:1px solid #334155;border-radius:18px;padding:16px;margin:12px 0}
+.option{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border-radius:12px;border:1px solid #334155;background:#1e293b;color:white;cursor:pointer}
+.correct{background:#14532d!important}.wrong{background:#7f1d1d!important}
+.note{border-left:5px solid #38bdf8;background:#082f49;border-radius:16px;padding:15px}
+@media(max-width:900px){.stage,.grid3{grid-template-columns:1fr}.sim{min-height:560px}.band{left:30px;right:30px}.gapZone{left:30px;right:30px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚡ Energy Band Theory Simulator</h1>
+  <p style="color:#94a3b8;margin:8px 0 0">Click, drag sliders, give energy, watch electrons jump and see conductivity change</p>
+</header>
+
+<div class="wrap">
+
+<div class="card">
+  <h2>1. Select material type</h2>
+  <div class="controls">
+    <button class="active" onclick="setMaterial('metal',this)">🟢 Metal / Conductor</button>
+    <button onclick="setMaterial('semi',this)">🟡 Semiconductor</button>
+    <button onclick="setMaterial('insulator',this)">🔴 Insulator</button>
+  </div>
+
+  <div class="stage">
+    <div class="sim" id="sim">
+      <div class="label" style="top:35px;left:75px" onclick="popup('Conduction band is the energy band where electrons are free to move and conduct electricity.')">Click: Conduction Band</div>
+      <div class="label" style="bottom:55px;left:75px" onclick="popup('Valence band contains bound valence electrons. Electrons normally stay here before getting energy.')">Click: Valence Band</div>
+      <div class="label" style="top:270px;right:75px" onclick="popup('Band gap is the energy needed for an electron to jump from valence band to conduction band.')">Click: Band Gap</div>
+
+      <div class="band cb">CONDUCTION BAND</div>
+      <div class="gapZone" id="gapText">Small Band Gap<br>Eg &lt; 3 eV</div>
+      <div class="band vb">VALENCE BAND</div>
+
+      <div class="photon" id="photon">🔥</div>
+      <div class="electron" id="e1" style="left:145px;bottom:135px">e⁻</div>
+      <div class="electron" id="e2" style="left:235px;bottom:135px">e⁻</div>
+      <div class="electron" id="e3" style="left:325px;bottom:135px">e⁻</div>
+      <div class="electron" id="e4" style="left:415px;bottom:135px">e⁻</div>
+      <div class="hole" id="h1" style="left:145px;bottom:135px">h⁺</div>
+      <div class="hole" id="h2" style="left:235px;bottom:135px">h⁺</div>
+    </div>
+
+    <div class="side">
+      <h2 id="matTitle">Semiconductor</h2>
+      <p id="matExplain">Semiconductors have a small energy gap. At room temperature some electrons get enough energy to jump to the conduction band.</p>
+
+      <button onclick="giveEnergy()">🔥 Give Energy</button>
+      <button onclick="resetElectrons()">↺ Reset</button>
+
+      <h3>Temperature / Energy</h3>
+      <input id="energySlider" type="range" min="0" max="100" value="45" oninput="updateEnergy(this.value)">
+      <div class="conductivityMeter"><div class="fill" id="fill"></div></div>
+
+      <div class="stat">
+        <div class="box"><div>Band gap</div><div class="big" id="gapValue">1.1 eV</div></div>
+        <div class="box"><div>Conductivity</div><div class="big" id="condValue">Medium</div></div>
+        <div class="box"><div>Free electrons</div><div class="big" id="freeValue">Some</div></div>
+        <div class="box"><div>Example</div><div class="big" id="exampleValue">Si / Ge</div></div>
+      </div>
+
+      <div class="story" id="story">
+        Story: Electron is sitting in the valence band. If it gets enough energy, it jumps to conduction band and helps current flow.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>2. Learn by clicking cards</h2>
+  <div class="grid3">
+    <div class="mini" onclick="explainCard('metal')">
+      <h2>🟢 Metal</h2>
+      <p>Bands overlap or conduction band is partially filled. Electrons move easily.</p>
+    </div>
+    <div class="mini" onclick="explainCard('semi')">
+      <h2>🟡 Semiconductor</h2>
+      <p>Small gap. Heat or light can push some electrons into conduction band.</p>
+    </div>
+    <div class="mini" onclick="explainCard('insulator')">
+      <h2>🔴 Insulator</h2>
+      <p>Large gap. Normal energy cannot move electrons to conduction band.</p>
+    </div>
+  </div>
+  <div class="note" id="cardExplain" style="margin-top:15px">
+    Click any card to see a board-exam explanation.
+  </div>
+</div>
+
+<div class="card">
+  <h2>3. Step-by-step story mode</h2>
+  <div class="controls">
+    <button onclick="storyStep(1)">Step 1</button>
+    <button onclick="storyStep(2)">Step 2</button>
+    <button onclick="storyStep(3)">Step 3</button>
+    <button onclick="storyStep(4)">Step 4</button>
+  </div>
+  <div class="story" id="storyMode">Click Step 1.</div>
+</div>
+
+<div class="card">
+  <h2>4. Quick quiz</h2>
+  <div class="quiz">
+    <b>1. In a semiconductor, energy gap is:</b>
+    <button class="option" onclick="mark(this,false)">Very large</button>
+    <button class="option" onclick="mark(this,true)">Small, less than about 3 eV</button>
+    <button class="option" onclick="mark(this,false)">Always zero</button>
+  </div>
+  <div class="quiz">
+    <b>2. Conductivity happens when electrons are in:</b>
+    <button class="option" onclick="mark(this,true)">Conduction band</button>
+    <button class="option" onclick="mark(this,false)">Only nucleus</button>
+    <button class="option" onclick="mark(this,false)">Only proton shell</button>
+  </div>
+  <div class="quiz">
+    <b>3. In an insulator, electrons cannot easily jump because:</b>
+    <button class="option" onclick="mark(this,false)">There is no valence band</button>
+    <button class="option" onclick="mark(this,true)">Band gap is very large</button>
+    <button class="option" onclick="mark(this,false)">Electrons are positive</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>🎓 Board Exam Answer</h2>
+  <p>According to energy band theory, electrons in solids occupy allowed energy bands. The band containing valence electrons is called the valence band, and the band above it is called the conduction band. The energy difference between them is called the energy gap or band gap.</p>
+  <p>In conductors, the valence band and conduction band overlap or the conduction band is partially filled, so electrons move freely. In semiconductors, the band gap is small, so some electrons can jump to the conduction band at room temperature. In insulators, the band gap is large, so electrons cannot easily move to the conduction band.</p>
+</div>
+
+</div>
+
+<script>
+let current='semi';
+function setMaterial(type,btn){
+  current=type;
+  document.querySelectorAll('.controls button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  resetElectrons();
+  const gap=document.getElementById('gapText');
+  if(type==='metal'){
+    gap.innerHTML='No Band Gap / Overlap';
+    gap.style.top='172px'; gap.style.bottom='285px'; gap.style.background='rgba(34,197,94,.22)'; gap.style.color='#86efac';
+    document.getElementById('matTitle').textContent='Metal / Conductor';
+    document.getElementById('matExplain').textContent='In metals, the conduction band is partially filled or overlaps with the valence band. Electrons are already free, so conductivity is very high.';
+    document.getElementById('gapValue').textContent='≈ 0 eV';
+    document.getElementById('condValue').textContent='High';
+    document.getElementById('freeValue').textContent='Many';
+    document.getElementById('exampleValue').textContent='Cu / Al';
+  }
+  if(type==='semi'){
+    gap.innerHTML='Small Band Gap<br>Eg &lt; 3 eV';
+    gap.style.top='181px'; gap.style.bottom='201px'; gap.style.background='transparent'; gap.style.color='#fde68a';
+    document.getElementById('matTitle').textContent='Semiconductor';
+    document.getElementById('matExplain').textContent='Semiconductors have a small energy gap. At room temperature some electrons get enough energy to jump to the conduction band.';
+    document.getElementById('gapValue').textContent='0.2–3 eV';
+    document.getElementById('condValue').textContent='Medium';
+    document.getElementById('freeValue').textContent='Some';
+    document.getElementById('exampleValue').textContent='Si / Ge';
+  }
+  if(type==='insulator'){
+    gap.innerHTML='Large Band Gap<br>Eg &gt; 3 eV';
+    gap.style.top='181px'; gap.style.bottom='201px'; gap.style.background='rgba(239,68,68,.08)'; gap.style.color='#fca5a5';
+    document.getElementById('matTitle').textContent='Insulator';
+    document.getElementById('matExplain').textContent='In insulators, the energy gap is very large. Normal thermal energy cannot push electrons to the conduction band, so current is almost zero.';
+    document.getElementById('gapValue').textContent='> 3 eV';
+    document.getElementById('condValue').textContent='Very low';
+    document.getElementById('freeValue').textContent='Almost none';
+    document.getElementById('exampleValue').textContent='Rubber';
+  }
+  updateEnergy(document.getElementById('energySlider').value);
+}
+function giveEnergy(){
+  const photon=document.getElementById('photon');
+  photon.style.display='block'; photon.style.animation='none'; photon.offsetHeight; photon.style.animation='photon 1.1s linear forwards';
+  const electrons=[e1,e2,e3,e4];
+  setTimeout(()=>{
+    if(current==='metal'){
+      electrons.forEach(e=>{e.style.bottom='420px'; e.classList.add('free')});
+      story.innerHTML='Metal: electrons are already free. Current flows very easily.';
+    }else if(current==='semi'){
+      e1.style.bottom='420px'; e2.style.bottom='420px'; e1.classList.add('free'); e2.classList.add('free');
+      h1.style.display='flex'; h2.style.display='flex';
+      story.innerHTML='Semiconductor: heat/light gives energy. Some electrons jump to the conduction band and leave holes behind.';
+    }else{
+      e1.style.transform='translateY(-45px)';
+      setTimeout(()=>e1.style.transform='translateY(0)',900);
+      story.innerHTML='Insulator: energy is not enough. The electron cannot cross the large band gap.';
+    }
+  },650);
+}
+function resetElectrons(){
+  [e1,e2,e3,e4].forEach((e,i)=>{e.classList.remove('free'); e.style.transform=''; e.style.bottom='135px'; e.style.left=(145+i*90)+'px'; e.style.display='flex';});
+  h1.style.display='none'; h2.style.display='none';
+}
+function updateEnergy(v){
+  document.getElementById('fill').style.width=v+'%';
+  let base = current==='metal'?75:current==='semi'?35:5;
+  let total = Math.min(100, Math.round(base + Number(v)*0.25));
+  if(current==='insulator') total = Math.min(25, Math.round(Number(v)*0.2));
+  if(current==='metal') total = Math.max(75,total);
+  document.getElementById('condValue').textContent = total>70?'High':total>35?'Medium':'Low';
+}
+function popup(text){
+  alert(text);
+}
+function explainCard(type){
+  let text='';
+  if(type==='metal') text='Metal: In metals, conduction band and valence band overlap or conduction band is partially filled. Hence many electrons are available for conduction and conductivity is high.';
+  if(type==='semi') text='Semiconductor: It has a small but finite energy gap. At room temperature, some electrons cross the gap and enter the conduction band. Hence conductivity is intermediate.';
+  if(type==='insulator') text='Insulator: It has a large energy gap, usually greater than 3 eV. Electrons cannot easily reach the conduction band, so conductivity is very low.';
+  document.getElementById('cardExplain').textContent=text;
+}
+function storyStep(n){
+  const s=document.getElementById('storyMode');
+  if(n===1)s.innerHTML='Step 1: Electrons normally stay in the valence band.';
+  if(n===2)s.innerHTML='Step 2: To conduct electricity, electrons must reach the conduction band.';
+  if(n===3)s.innerHTML='Step 3: The energy needed to jump is called band gap Eg.';
+  if(n===4)s.innerHTML='Step 4: Small gap means semiconductor, large gap means insulator, zero/overlap means conductor.';
+}
+function mark(btn,ok){
+  btn.classList.add(ok?'correct':'wrong');
+}
+setMaterial('semi');
+</script>
+</body>
+</html>

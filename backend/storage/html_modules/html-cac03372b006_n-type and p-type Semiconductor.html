@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>n-type and p-type Semiconductor - Step by Step Visual</title>
+<style>
+:root{
+  --bg:#020617;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;
+  --blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--pink:#fb7185;--purple:#a78bfa;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+  background:radial-gradient(circle at 15% 8%,#164e63,transparent 35%),
+             radial-gradient(circle at 85% 18%,#581c87,transparent 30%),
+             linear-gradient(135deg,#020617,#0f172a 60%,#111827);
+}
+header{
+  text-align:center;padding:24px 16px;background:rgba(2,6,23,.88);
+  border-bottom:1px solid rgba(148,163,184,.25);position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)
+}
+h1{margin:0;font-size:clamp(24px,4vw,44px)}
+p,li{line-height:1.7}
+.wrap{max-width:1280px;margin:auto;padding:20px}
+.card{
+  background:rgba(15,23,42,.93);border:1px solid rgba(148,163,184,.22);border-radius:26px;
+  padding:22px;margin:18px 0;box-shadow:0 24px 60px rgba(0,0,0,.35)
+}
+.main{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+.visual{
+  min-height:700px;background:#020617;border:1px solid #334155;border-radius:24px;position:relative;overflow:hidden;
+  background-image:linear-gradient(rgba(56,189,248,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.08) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+.side{background:#020617;border:1px solid #334155;border-radius:24px;padding:20px}
+h2{color:#bae6fd;margin-top:0}
+h3{color:#c4b5fd}
+button{
+  border:0;border-radius:14px;padding:13px 16px;background:#1e293b;color:#fff;font-weight:900;cursor:pointer;margin:5px;
+  box-shadow:0 8px 20px rgba(0,0,0,.18)
+}
+button:hover,button.active{background:linear-gradient(90deg,#0284c7,#2563eb)}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.atom{
+  width:74px;height:74px;border-radius:50%;position:absolute;background:radial-gradient(circle at 35% 30%,#93c5fd,#2563eb 55%,#1e3a8a);
+  display:flex;align-items:center;justify-content:center;font-weight:1000;color:#dbeafe;border:2px solid rgba(191,219,254,.65);
+  box-shadow:0 0 26px rgba(56,189,248,.45);z-index:3;transition:.45s
+}
+.atom::after{content:"+4";position:absolute;font-size:12px;bottom:7px;right:9px;color:#e0f2fe}
+.atom.focus{transform:scale(1.18);box-shadow:0 0 45px rgba(56,189,248,1)}
+.atom.donor{background:radial-gradient(circle at 35% 30%,#bbf7d0,#22c55e 55%,#14532d);color:#052e16}
+.atom.donor::after{content:"+5";color:#052e16}
+.atom.acceptor{background:radial-gradient(circle at 35% 30%,#fecdd3,#fb7185 55%,#881337);color:#fff1f2}
+.atom.acceptor::after{content:"+3";color:#fff1f2}
+.bond{
+  position:absolute;height:8px;background:linear-gradient(90deg,#64748b,#cbd5e1,#64748b);border-radius:999px;transform-origin:left center;z-index:1;
+  opacity:.55;box-shadow:0 0 10px rgba(203,213,225,.22);transition:.4s
+}
+.bond.glow{opacity:1;box-shadow:0 0 18px rgba(203,213,225,.9)}
+.electron{
+  width:25px;height:25px;border-radius:50%;position:absolute;background:radial-gradient(circle at 30% 30%,#fff,#facc15 38%,#ca8a04);
+  color:#422006;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:1000;z-index:5;
+  box-shadow:0 0 18px rgba(250,204,21,.9);transition:1s
+}
+.extraElectron{
+  width:32px;height:32px;border-radius:50%;position:absolute;background:radial-gradient(circle at 30% 30%,#fff,#34d399 38%,#059669);
+  color:#052e16;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:1000;z-index:8;
+  box-shadow:0 0 24px rgba(34,197,94,.95);transition:1s
+}
+.extraElectron.free{animation:freeElectron 2.4s linear infinite}
+@keyframes freeElectron{
+  0%{transform:translate(0,0)}25%{transform:translate(90px,-45px)}50%{transform:translate(190px,10px)}75%{transform:translate(80px,60px)}100%{transform:translate(0,0)}
+}
+.hole{
+  width:36px;height:36px;border-radius:50%;position:absolute;border:3px dashed #fb7185;color:#fb7185;
+  display:none;align-items:center;justify-content:center;font-size:12px;font-weight:1000;z-index:8;background:rgba(239,68,68,.12);
+  box-shadow:0 0 24px rgba(251,113,133,.85);transition:1s
+}
+.hole.move{animation:holeMove 2.4s linear infinite}
+@keyframes holeMove{
+  0%{transform:translate(0,0)}25%{transform:translate(-70px,45px)}50%{transform:translate(-150px,0)}75%{transform:translate(-65px,-50px)}100%{transform:translate(0,0)}
+}
+.dopant{
+  position:absolute;left:20px;top:295px;width:82px;height:82px;border-radius:50%;display:none;align-items:center;justify-content:center;
+  font-weight:1000;font-size:20px;z-index:25;animation:dopantMove 1.1s linear forwards
+}
+.donorD{background:#22c55e;color:#052e16;box-shadow:0 0 35px rgba(34,197,94,.9)}
+.acceptorD{background:#fb7185;color:#fff1f2;box-shadow:0 0 35px rgba(251,113,133,.9)}
+@keyframes dopantMove{from{left:20px;opacity:1;transform:scale(.9)}to{left:44%;opacity:.2;transform:scale(1.4)}}
+.arrow{
+  position:absolute;padding:8px 12px;border-radius:999px;background:#064e3b;color:#bbf7d0;border:1px solid #22c55e;
+  font-weight:900;display:none;z-index:10;box-shadow:0 0 20px rgba(34,197,94,.65)
+}
+.arrow.pink{background:#4c0519;color:#fecdd3;border-color:#fb7185;box-shadow:0 0 20px rgba(251,113,133,.65)}
+.story{
+  background:#082f49;border-left:5px solid #38bdf8;border-radius:16px;padding:16px;margin-top:14px;font-size:17px
+}
+.stepNo{font-size:14px;color:#94a3b8;font-weight:900}
+.bigText{font-size:25px;font-weight:1000;color:#67e8f9;margin:8px 0}
+.flowBox{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.box{background:#111827;border:1px solid #334155;border-radius:18px;padding:14px}
+.formula{font-size:26px;font-weight:1000;color:#fef08a;text-align:center;padding:14px;border-radius:16px;background:#422006;margin:12px 0}
+.timeline{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.dot{padding:8px 10px;border-radius:999px;background:#1e293b;color:#94a3b8;font-weight:900;cursor:pointer}
+.dot.active{background:#0284c7;color:white}
+.exam{background:linear-gradient(135deg,#1e1b4b,#0f172a);border-left:5px solid #38bdf8}
+.table{width:100%;border-collapse:collapse;margin-top:10px}
+.table th,.table td{border:1px solid #334155;padding:12px;text-align:left}
+.table th{background:#1e293b;color:#bae6fd}
+.modeCard{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.small{background:#020617;border:1px solid #334155;border-radius:20px;padding:18px}
+@media(max-width:930px){.main,.flowBox,.modeCard{grid-template-columns:1fr}.visual{min-height:710px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>n-type and p-type Semiconductor: Best Step-by-Step Visual</h1>
+  <p style="color:#94a3b8;margin:8px 0 0">Pentavalent impurity donates extra electron • Trivalent impurity creates hole • Exam perspective included</p>
+</header>
+
+<div class="wrap">
+<section class="card main">
+  <div class="visual" id="visual">
+    <div class="dopant donorD" id="donorParticle">P +5</div>
+    <div class="dopant acceptorD" id="acceptorParticle">B +3</div>
+    <div class="arrow" id="electronArrow" style="right:35px;top:178px">extra electron moves freely →</div>
+    <div class="arrow pink" id="holeArrow" style="left:35px;bottom:96px">hole appears to move ←</div>
+  </div>
+
+  <div class="side">
+    <div class="tabs">
+      <button class="active" id="nBtn" onclick="setMode('n')">🟢 n-type</button>
+      <button id="pBtn" onclick="setMode('p')">🌸 p-type</button>
+    </div>
+
+    <div class="stepNo" id="stepNo">STEP 1 OF 7</div>
+    <div class="bigText" id="title">Pure Silicon</div>
+    <div class="timeline" id="timeline"></div>
+
+    <div class="controls">
+      <button onclick="prevStep()">⬅ Previous</button>
+      <button onclick="nextStep()">Next ➡</button>
+      <button onclick="autoPlay()">▶ Auto Play</button>
+      <button onclick="resetAll()">🔄 Reset</button>
+    </div>
+
+    <div class="story">
+      <h3>What is happening?</h3>
+      <p id="what"></p>
+      <h3>Why?</h3>
+      <p id="why"></p>
+      <h3>Exam point</h3>
+      <p id="exam"></p>
+    </div>
+
+    <div class="flowBox">
+      <div class="box"><b>Majority Carrier</b><div class="bigText" id="majority">-</div></div>
+      <div class="box"><b>Minority Carrier</b><div class="bigText" id="minority">-</div></div>
+    </div>
+
+    <div class="formula" id="formula">Select n-type or p-type</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Simple Theory</h2>
+  <div class="modeCard">
+    <div class="small">
+      <h3>🟢 n-type Semiconductor</h3>
+      <p>When Silicon or Germanium is doped with a <b>pentavalent impurity</b> like Phosphorus, Arsenic or Antimony, the impurity atom has 5 valence electrons.</p>
+      <p>Four electrons form covalent bonds with neighbouring Silicon atoms. The fifth electron is extra and weakly bound, so it becomes free for conduction.</p>
+      <p><b>Majority carrier:</b> Electrons<br><b>Minority carrier:</b> Holes</p>
+    </div>
+    <div class="small">
+      <h3>🌸 p-type Semiconductor</h3>
+      <p>When Silicon or Germanium is doped with a <b>trivalent impurity</b> like Boron, Aluminium or Indium, the impurity atom has only 3 valence electrons.</p>
+      <p>It forms only three covalent bonds. One bond remains incomplete, creating a hole. This hole is available for conduction.</p>
+      <p><b>Majority carrier:</b> Holes<br><b>Minority carrier:</b> Electrons</p>
+    </div>
+  </div>
+</section>
+
+<section class="card exam">
+  <h2>Board Exam Answer</h2>
+  <p><b>n-type semiconductor:</b> It is obtained by doping pure Si or Ge with pentavalent impurity atoms such as P, As or Sb. Four valence electrons of the dopant form covalent bonds with neighbouring Si atoms, while the fifth electron remains weakly bound and becomes free for conduction. Therefore electrons are majority carriers and holes are minority carriers. For n-type semiconductor, <b>ne &gt;&gt; nh</b>.</p>
+  <p><b>p-type semiconductor:</b> It is obtained by doping pure Si or Ge with trivalent impurity atoms such as B, Al or In. The dopant forms only three covalent bonds, and the fourth bond remains incomplete, creating a hole. Therefore holes are majority carriers and electrons are minority carriers. For p-type semiconductor, <b>nh &gt;&gt; ne</b>.</p>
+
+  <table class="table">
+    <tr><th>Type</th><th>Dopant</th><th>Dopant name</th><th>Majority carrier</th><th>Relation</th></tr>
+    <tr><td>n-type</td><td>Pentavalent: P, As, Sb</td><td>Donor impurity</td><td>Electrons</td><td>ne &gt;&gt; nh</td></tr>
+    <tr><td>p-type</td><td>Trivalent: B, Al, In</td><td>Acceptor impurity</td><td>Holes</td><td>nh &gt;&gt; ne</td></tr>
+  </table>
+</section>
+</div>
+
+<script>
+const visual=document.getElementById('visual');
+let atoms=[], bonds=[], electrons=[], step=1, mode='n', timer=null;
+const atomPos=[[145,115],[305,115],[465,115],[145,285],[305,285],[465,285],[145,455],[305,455],[465,455]];
+const electronPos=[[225,145],[385,145],[225,315],[385,315],[225,485],[385,485],[170,235],[330,235],[490,235],[170,405],[330,405],[490,405]];
+function init(){
+  atomPos.forEach((p,i)=>{
+    const a=document.createElement('div');
+    a.className='atom'; a.textContent='Si'; a.style.left=p[0]+'px'; a.style.top=p[1]+'px';
+    visual.appendChild(a); atoms.push(a);
+  });
+  [[0,1],[1,2],[3,4],[4,5],[6,7],[7,8],[0,3],[3,6],[1,4],[4,7],[2,5],[5,8]].forEach(([i,j])=>bond(i,j));
+  electronPos.forEach((p,i)=>{
+    const e=document.createElement('div');
+    e.className='electron'; e.textContent='e⁻'; e.style.left=p[0]+'px'; e.style.top=p[1]+'px';
+    visual.appendChild(e); electrons.push(e);
+  });
+  const extra=document.createElement('div');
+  extra.className='extraElectron'; extra.id='extraElectron'; extra.textContent='e⁻';
+  extra.style.left='343px'; extra.style.top='255px'; visual.appendChild(extra);
+  const h=document.createElement('div');
+  h.className='hole'; h.id='hole'; h.textContent='h⁺'; h.style.left='386px'; h.style.top='315px';
+  visual.appendChild(h);
+  buildTimeline(); renderStep();
+}
+function bond(i,j){
+  const [x1,y1]=atomPos[i], [x2,y2]=atomPos[j];
+  const b=document.createElement('div'); b.className='bond';
+  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+  b.style.left=(x1+37)+'px'; b.style.top=(y1+37)+'px'; b.style.width=len+'px';
+  b.style.transform='rotate('+Math.atan2(dy,dx)+'rad)';
+  visual.appendChild(b); bonds.push(b);
+}
+function buildTimeline(){
+  timeline.innerHTML='';
+  for(let i=1;i<=7;i++){
+    const d=document.createElement('div'); d.className='dot'; d.id='dot'+i; d.textContent=i;
+    d.onclick=()=>{step=i;renderStep()}; timeline.appendChild(d);
+  }
+}
+function setMode(m){
+  mode=m;step=1;clearInterval(timer);
+  nBtn.classList.toggle('active',m==='n'); pBtn.classList.toggle('active',m==='p');
+  renderStep();
+}
+function clean(){
+  atoms.forEach(a=>{a.className='atom';a.textContent='Si'});
+  bonds.forEach(b=>b.classList.remove('glow'));
+  donorParticle.style.display='none'; acceptorParticle.style.display='none';
+  extraElectron.style.display='none'; extraElectron.classList.remove('free'); extraElectron.style.left='343px'; extraElectron.style.top='255px';
+  hole.style.display='none'; hole.classList.remove('move'); hole.style.left='386px'; hole.style.top='315px';
+  electronArrow.style.display='none'; holeArrow.style.display='none';
+}
+function renderStep(){
+  clean();
+  document.querySelectorAll('.dot').forEach(d=>d.classList.remove('active'));
+  document.getElementById('dot'+step).classList.add('active');
+  stepNo.textContent='STEP '+step+' OF 7';
+  majority.textContent='-'; minority.textContent='-';
+
+  if(step===1){
+    title.textContent='Pure Silicon Crystal';
+    bonds.forEach(b=>b.classList.add('glow'));
+    what.textContent='We begin with pure Silicon. All atoms are Silicon atoms and they form covalent bonds.';
+    why.textContent='Pure Silicon has low conductivity because it has very few free charge carriers at room temperature.';
+    exam.textContent='Pure Si or Ge is an intrinsic semiconductor.';
+    formula.textContent='Before doping: fewer free carriers';
+  }
+
+  if(step===2){
+    title.textContent=mode==='n'?'Add Pentavalent Impurity':'Add Trivalent Impurity';
+    if(mode==='n') donorParticle.style.display='flex'; else acceptorParticle.style.display='flex';
+    what.textContent=mode==='n'
+      ? 'A pentavalent impurity like Phosphorus is added to pure Silicon.'
+      : 'A trivalent impurity like Boron is added to pure Silicon.';
+    why.textContent='This impurity is added in a very small amount to increase conductivity.';
+    exam.textContent='The process of adding impurity is called doping.';
+    formula.textContent='Doping → conductivity increases';
+  }
+
+  if(step===3){
+    title.textContent=mode==='n'?'Phosphorus Replaces One Silicon Atom':'Boron Replaces One Silicon Atom';
+    atoms[4].classList.add(mode==='n'?'donor':'acceptor','focus'); atoms[4].textContent=mode==='n'?'P':'B';
+    bonds.forEach(b=>b.classList.add('glow'));
+    what.textContent=mode==='n'
+      ? 'Phosphorus has 5 valence electrons and takes the position of one Silicon atom.'
+      : 'Boron has 3 valence electrons and takes the position of one Silicon atom.';
+    why.textContent=mode==='n'
+      ? 'Silicon needs 4 electrons for bonding, but Phosphorus has 5.'
+      : 'Silicon needs 4 electrons for bonding, but Boron has only 3.';
+    exam.textContent=mode==='n'
+      ? 'Pentavalent dopants: P, As, Sb.'
+      : 'Trivalent dopants: B, Al, In.';
+    formula.textContent=mode==='n'?'+5 dopant in Si lattice':'+3 dopant in Si lattice';
+  }
+
+  if(step===4){
+    title.textContent=mode==='n'?'Four Bonds + One Extra Electron':'Only Three Bonds + One Hole';
+    atoms[4].classList.add(mode==='n'?'donor':'acceptor','focus'); atoms[4].textContent=mode==='n'?'P':'B';
+    bonds.forEach(b=>b.classList.add('glow'));
+    if(mode==='n') extraElectron.style.display='flex'; else hole.style.display='flex';
+    what.textContent=mode==='n'
+      ? 'Four electrons form covalent bonds. The fifth electron is extra and weakly attached.'
+      : 'Three bonds are completed. One bond is incomplete, so a hole is formed.';
+    why.textContent=mode==='n'
+      ? 'This extra electron can easily become free and conduct current.'
+      : 'A neighbouring electron can fill this vacancy, making the hole appear to move.';
+    exam.textContent=mode==='n'
+      ? 'Pentavalent impurity is called donor impurity because it donates an electron.'
+      : 'Trivalent impurity is called acceptor impurity because it accepts an electron and creates a hole.';
+    formula.textContent=mode==='n'?'Donor → extra electron':'Acceptor → hole';
+  }
+
+  if(step===5){
+    title.textContent=mode==='n'?'Extra Electron Becomes Free':'Hole Becomes Free Carrier';
+    atoms[4].classList.add(mode==='n'?'donor':'acceptor'); atoms[4].textContent=mode==='n'?'P':'B';
+    if(mode==='n'){
+      extraElectron.style.display='flex'; extraElectron.style.left='615px'; extraElectron.style.top='185px'; extraElectron.classList.add('free');
+      electronArrow.style.display='block'; majority.textContent='Electrons'; minority.textContent='Holes'; formula.textContent='ne >> nh';
+      what.textContent='The fifth electron gets released and moves freely in the crystal.';
+      why.textContent='Because many dopant atoms donate electrons, electrons become the majority carriers.';
+      exam.textContent='In n-type semiconductor, electrons are majority carriers.';
+    } else {
+      hole.style.display='flex'; hole.classList.add('move'); holeArrow.style.display='block'; majority.textContent='Holes'; minority.textContent='Electrons'; formula.textContent='nh >> ne';
+      what.textContent='The hole acts like a positive charge carrier and moves through the crystal.';
+      why.textContent='Because many dopant atoms create holes, holes become the majority carriers.';
+      exam.textContent='In p-type semiconductor, holes are majority carriers.';
+    }
+  }
+
+  if(step===6){
+    title.textContent=mode==='n'?'n-type Semiconductor Formed':'p-type Semiconductor Formed';
+    atoms[4].classList.add(mode==='n'?'donor':'acceptor'); atoms[4].textContent=mode==='n'?'P':'B';
+    majority.textContent=mode==='n'?'Electrons':'Holes'; minority.textContent=mode==='n'?'Holes':'Electrons';
+    formula.textContent=mode==='n'?'n-type: ne >> nh':'p-type: nh >> ne';
+    if(mode==='n'){extraElectron.style.display='flex'; extraElectron.style.left='615px'; extraElectron.style.top='185px'; extraElectron.classList.add('free'); electronArrow.style.display='block';}
+    else{hole.style.display='flex'; hole.classList.add('move'); holeArrow.style.display='block';}
+    what.textContent=mode==='n'
+      ? 'Now the material is called n-type because negative charge carriers, electrons, dominate.'
+      : 'Now the material is called p-type because positive charge carriers, holes, dominate.';
+    why.textContent='Doping increased the number of current carriers, so conductivity increases.';
+    exam.textContent=mode==='n'
+      ? 'n-type: pentavalent impurity, donor, electrons majority.'
+      : 'p-type: trivalent impurity, acceptor, holes majority.';
+  }
+
+  if(step===7){
+    title.textContent='Final Exam Summary';
+    atoms[4].classList.add(mode==='n'?'donor':'acceptor'); atoms[4].textContent=mode==='n'?'P':'B';
+    majority.textContent=mode==='n'?'Electrons':'Holes'; minority.textContent=mode==='n'?'Holes':'Electrons';
+    formula.textContent=mode==='n'?'P / As / Sb → n-type':'B / Al / In → p-type';
+    if(mode==='n'){extraElectron.style.display='flex'; extraElectron.style.left='615px'; extraElectron.style.top='185px'; extraElectron.classList.add('free'); electronArrow.style.display='block';}
+    else{hole.style.display='flex'; hole.classList.add('move'); holeArrow.style.display='block';}
+    what.textContent=mode==='n'
+      ? 'Pentavalent impurity donates one extra electron. That electron helps conduction.'
+      : 'Trivalent impurity creates one hole. That hole helps conduction.';
+    why.textContent=mode==='n'
+      ? 'So electrons are majority carriers and holes are minority carriers.'
+      : 'So holes are majority carriers and electrons are minority carriers.';
+    exam.textContent=mode==='n'
+      ? 'For n-type semiconductor: ne >> nh.'
+      : 'For p-type semiconductor: nh >> ne.';
+  }
+}
+function nextStep(){step=step<7?step+1:7;renderStep()}
+function prevStep(){step=step>1?step-1:1;renderStep()}
+function resetAll(){clearInterval(timer);step=1;renderStep()}
+function autoPlay(){
+  clearInterval(timer);step=1;renderStep();
+  timer=setInterval(()=>{if(step>=7){clearInterval(timer)}else{step++;renderStep()}},2800);
+}
+init();
+</script>
+</body>
+</html>

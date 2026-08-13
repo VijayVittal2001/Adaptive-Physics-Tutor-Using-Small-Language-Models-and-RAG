@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Interactive Classification of Conductors, Semiconductors and Insulators</title>
+<style>
+:root{
+  --bg:#0f172a; --card:#111827; --card2:#1e293b; --text:#e5e7eb; --muted:#94a3b8;
+  --accent:#38bdf8; --good:#22c55e; --warn:#f59e0b; --bad:#ef4444; --purple:#a78bfa;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:Inter,Segoe UI,Arial,sans-serif; background:linear-gradient(135deg,#020617,#0f172a 45%,#172554);
+  color:var(--text); min-height:100vh;
+}
+header{padding:28px 22px;text-align:center;background:rgba(15,23,42,.78);position:sticky;top:0;z-index:5;backdrop-filter:blur(10px);border-bottom:1px solid rgba(148,163,184,.25)}
+h1{margin:0;font-size:clamp(24px,4vw,42px)}
+.subtitle{color:var(--muted);margin-top:10px;font-size:16px}
+.wrapper{max-width:1200px;margin:auto;padding:22px}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:20px}
+.sidebar{background:rgba(17,24,39,.82);border:1px solid rgba(148,163,184,.18);border-radius:22px;padding:16px;height:max-content;position:sticky;top:118px}
+.sidebtn{width:100%;padding:13px 14px;margin:7px 0;border:0;border-radius:14px;background:#1e293b;color:#e5e7eb;cursor:pointer;text-align:left;font-weight:700}
+.sidebtn.active,.sidebtn:hover{background:linear-gradient(90deg,#0284c7,#2563eb)}
+.card{background:rgba(17,24,39,.86);border:1px solid rgba(148,163,184,.20);border-radius:24px;padding:22px;margin-bottom:18px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+h2{margin:0 0 12px;color:#bae6fd}
+h3{color:#c4b5fd;margin:18px 0 8px}
+p,li{line-height:1.7}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#1e3a8a;margin:4px;color:#dbeafe;font-size:13px;font-weight:700}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.tab{padding:10px 14px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:#e5e7eb;cursor:pointer}
+.tab.active{background:#0284c7;border-color:#38bdf8}
+.panel{display:none}
+.panel.active{display:block}
+.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:15px}
+.typecard{padding:18px;border-radius:20px;background:#0f172a;border:1px solid #334155;min-height:210px;cursor:pointer;transition:.25s}
+.typecard:hover{transform:translateY(-6px);border-color:#38bdf8}
+.typecard h3{margin-top:0}
+.metal{box-shadow:inset 0 0 0 2px rgba(34,197,94,.25)}
+.semi{box-shadow:inset 0 0 0 2px rgba(245,158,11,.25)}
+.insu{box-shadow:inset 0 0 0 2px rgba(239,68,68,.25)}
+.road{height:160px;background:#020617;border-radius:18px;padding:16px;border:1px solid #334155;position:relative;overflow:hidden;margin:12px 0}
+.lane{height:18px;background:#475569;border-radius:20px;margin:10px 0;position:relative}
+.car{position:absolute;top:-6px;width:30px;height:30px;border-radius:50%;background:#38bdf8;animation:drive 2.5s linear infinite}
+.car:nth-child(2){animation-delay:.45s}.car:nth-child(3){animation-delay:.9s}.car:nth-child(4){animation-delay:1.35s}
+.block{position:absolute;right:50px;top:-10px;font-size:32px}
+@keyframes drive{from{left:-40px}to{left:105%}}
+.bandBox{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.band{background:#020617;border:1px solid #334155;border-radius:18px;padding:15px;text-align:center;min-height:260px}
+.level{height:46px;border-radius:14px;margin:12px 0;display:flex;align-items:center;justify-content:center;font-weight:800}
+.conduction{background:#1d4ed8}
+.valence{background:#7c2d12}
+.gap{border:2px dashed #facc15;color:#fde68a;background:rgba(250,204,21,.08)}
+.tinygap{height:28px}.largegap{height:86px}.nogap{height:8px;border-style:solid;background:#22c55e;color:#052e16}
+.sliderBox{margin-top:18px;background:#020617;border-radius:18px;padding:18px;border:1px solid #334155}
+input[type=range]{width:100%}
+.result{font-size:22px;font-weight:900;margin-top:10px;color:#67e8f9}
+.quizQ{background:#020617;border:1px solid #334155;border-radius:18px;padding:16px;margin:12px 0}
+.option{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border-radius:12px;border:1px solid #334155;background:#1e293b;color:white;cursor:pointer}
+.option.correct{background:#14532d}.option.wrong{background:#7f1d1d}
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.node{padding:12px 15px;border-radius:14px;background:#1e293b;border:1px solid #334155;font-weight:800}
+.arrow{font-size:28px;color:#38bdf8}
+.exam{background:linear-gradient(135deg,#1e1b4b,#0f172a);border-left:5px solid #38bdf8}
+.footer{text-align:center;color:#94a3b8;padding:24px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.sidebar{position:relative;top:0}.compare,.bandBox{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Classification of Conductors, Semiconductors and Insulators</h1>
+  <div class="subtitle">Interactive board-exam learning module with visuals, analogies, energy bands and quiz</div>
+</header>
+
+<div class="wrapper">
+<div class="grid">
+<aside class="sidebar">
+  <button class="sidebtn active" onclick="showSec('start',this)">🚀 Start Here</button>
+  <button class="sidebtn" onclick="showSec('conductivity',this)">⚡ Conductivity View</button>
+  <button class="sidebtn" onclick="showSec('energy',this)">📊 Energy Band View</button>
+  <button class="sidebtn" onclick="showSec('examples',this)">🌍 Examples</button>
+  <button class="sidebtn" onclick="showSec('exam',this)">🎓 Board Exam Notes</button>
+  <button class="sidebtn" onclick="showSec('quiz',this)">📝 Quick Quiz</button>
+</aside>
+
+<main>
+<section id="start" class="card section">
+  <h2>🚀 Big Idea</h2>
+  <p>All solids do not conduct electricity in the same way. Based on electrical conductivity, materials are classified into three groups:</p>
+  <div class="compare">
+    <div class="typecard metal" onclick="speak('Conductors allow electric current very easily because many free electrons are available.')">
+      <h3>🟢 Conductors / Metals</h3>
+      <p><b>Conductivity:</b> Very high</p>
+      <p><b>Resistivity:</b> Very low</p>
+      <p><b>Example:</b> Copper, Aluminium</p>
+      <span class="badge">Easy current flow</span>
+    </div>
+    <div class="typecard semi" onclick="speak('Semiconductors have conductivity between conductors and insulators. Their conductivity can be controlled.')">
+      <h3>🟡 Semiconductors</h3>
+      <p><b>Conductivity:</b> Intermediate</p>
+      <p><b>Resistivity:</b> Medium range</p>
+      <p><b>Example:</b> Silicon, Germanium</p>
+      <span class="badge">Controlled current flow</span>
+    </div>
+    <div class="typecard insu" onclick="speak('Insulators do not allow electric current easily because electrons cannot reach the conduction band.')">
+      <h3>🔴 Insulators</h3>
+      <p><b>Conductivity:</b> Very low</p>
+      <p><b>Resistivity:</b> Very high</p>
+      <p><b>Example:</b> Rubber, Glass</p>
+      <span class="badge">Current blocked</span>
+    </div>
+  </div>
+  <h3>Memory line</h3>
+  <p><b>Conductor = current flows easily</b>, <b>Semiconductor = current can be controlled</b>, <b>Insulator = current is blocked.</b></p>
+</section>
+
+<section id="conductivity" class="card section" style="display:none">
+  <h2>⚡ Visual 1: Conductivity as a Road</h2>
+  <p>Imagine electrons are cars and the material is a road.</p>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('road1',this)">Conductor</button>
+    <button class="tab" onclick="showTab('road2',this)">Semiconductor</button>
+    <button class="tab" onclick="showTab('road3',this)">Insulator</button>
+  </div>
+  <div id="road1" class="panel active">
+    <h3>🟢 Conductor: Wide highway</h3>
+    <div class="road">
+      <div class="lane"><div class="car"></div><div class="car"></div><div class="car"></div><div class="car"></div></div>
+      <div class="lane"><div class="car"></div><div class="car"></div><div class="car"></div></div>
+      <div class="lane"><div class="car"></div><div class="car"></div></div>
+    </div>
+    <p>Many electrons are free to move, so current flows easily. Hence metals have high conductivity and low resistivity.</p>
+  </div>
+  <div id="road2" class="panel">
+    <h3>🟡 Semiconductor: Adjustable road</h3>
+    <div class="road">
+      <div class="lane"><div class="car"></div><div class="car"></div></div>
+      <div class="lane"><div class="car"></div></div>
+    </div>
+    <p>Only some electrons can move at room temperature. By adding impurities or giving heat/light, conductivity increases.</p>
+  </div>
+  <div id="road3" class="panel">
+    <h3>🔴 Insulator: Road blocked</h3>
+    <div class="road">
+      <div class="lane"><div class="car"></div><span class="block">🚧</span></div>
+      <div class="lane"><span class="block">🚧</span></div>
+    </div>
+    <p>Electrons cannot move freely because the energy gap is very large. So current does not flow easily.</p>
+  </div>
+
+  <div class="sliderBox">
+    <h3>Try it: Change conductivity level</h3>
+    <input type="range" min="0" max="100" value="50" oninput="classify(this.value)">
+    <div class="result" id="classResult">Semiconductor: controlled current flow</div>
+  </div>
+</section>
+
+<section id="energy" class="card section" style="display:none">
+  <h2>📊 Visual 2: Energy Band Classification</h2>
+  <p>Electron conduction depends on the gap between the valence band and conduction band.</p>
+  <div class="bandBox">
+    <div class="band">
+      <h3>Metal / Conductor</h3>
+      <div class="level conduction">Conduction Band</div>
+      <div class="level nogap">No gap / overlap</div>
+      <div class="level valence">Valence Band</div>
+      <p>Electrons can easily move into conduction band. Conductivity is high.</p>
+    </div>
+    <div class="band">
+      <h3>Semiconductor</h3>
+      <div class="level conduction">Conduction Band</div>
+      <div class="level gap tinygap">Small gap<br>Eg &lt; 3 eV</div>
+      <div class="level valence">Valence Band</div>
+      <p>Some electrons cross the small gap at room temperature. Conductivity is moderate.</p>
+    </div>
+    <div class="band">
+      <h3>Insulator</h3>
+      <div class="level conduction">Conduction Band</div>
+      <div class="level gap largegap">Large gap<br>Eg &gt; 3 eV</div>
+      <div class="level valence">Valence Band</div>
+      <p>Electrons cannot cross the large gap by normal thermal energy. Conductivity is very low.</p>
+    </div>
+  </div>
+  <div class="card exam" style="margin-top:18px">
+    <h3>Easy Explanation</h3>
+    <p>Think of electrons as students. The valence band is the ground floor, the conduction band is the first floor, and the band gap is the staircase height. If the staircase is too high, students cannot climb. If it is small, some can climb. If there is no staircase, they move freely.</p>
+  </div>
+</section>
+
+<section id="examples" class="card section" style="display:none">
+  <h2>🌍 Real-Life Examples</h2>
+  <div class="flow">
+    <div class="node">Copper wire</div><div class="arrow">→</div><div class="node">Conductor</div><div class="arrow">→</div><div class="node">Carries current</div>
+  </div>
+  <br>
+  <div class="flow">
+    <div class="node">Silicon chip</div><div class="arrow">→</div><div class="node">Semiconductor</div><div class="arrow">→</div><div class="node">Controls current</div>
+  </div>
+  <br>
+  <div class="flow">
+    <div class="node">Plastic wire cover</div><div class="arrow">→</div><div class="node">Insulator</div><div class="arrow">→</div><div class="node">Protects from shock</div>
+  </div>
+  <h3>Why semiconductors are special?</h3>
+  <p>Conductors always allow current, insulators block current, but semiconductors can be controlled. That is why they are used in diodes, transistors, ICs, computers, mobiles and solar cells.</p>
+</section>
+
+<section id="exam" class="card section exam" style="display:none">
+  <h2>🎓 Board Exam Notes</h2>
+  <h3>Classification based on conductivity</h3>
+  <p>On the basis of electrical conductivity or resistivity, solids are broadly classified as metals/conductors, semiconductors and insulators.</p>
+  <ul>
+    <li><b>Metals:</b> They have very low resistivity and very high conductivity.</li>
+    <li><b>Semiconductors:</b> Their resistivity or conductivity is intermediate between metals and insulators.</li>
+    <li><b>Insulators:</b> They have high resistivity and low conductivity.</li>
+  </ul>
+  <h3>Important values</h3>
+  <ul>
+    <li><b>Metals:</b> ρ ≈ 10<sup>−2</sup> to 10<sup>−8</sup> Ω m</li>
+    <li><b>Semiconductors:</b> ρ ≈ 10<sup>−5</sup> to 10<sup>6</sup> Ω m</li>
+    <li><b>Insulators:</b> ρ ≈ 10<sup>11</sup> to 10<sup>19</sup> Ω m</li>
+  </ul>
+  <h3>Energy band answer</h3>
+  <p>In conductors, conduction band and valence band overlap or the conduction band is partially filled. In insulators, the energy gap is large, usually greater than 3 eV. In semiconductors, the energy gap is small, usually less than 3 eV, so some electrons can jump to the conduction band at room temperature.</p>
+  <h3>2-mark answer</h3>
+  <p>Solids are classified as conductors, semiconductors and insulators based on conductivity. Conductors have high conductivity, insulators have low conductivity and semiconductors have intermediate conductivity. Examples are copper, silicon and rubber respectively.</p>
+</section>
+
+<section id="quiz" class="card section" style="display:none">
+  <h2>📝 Quick Quiz</h2>
+  <div class="quizQ">
+    <b>1. Which material has intermediate conductivity?</b>
+    <button class="option" onclick="mark(this,false)">Insulator</button>
+    <button class="option" onclick="mark(this,true)">Semiconductor</button>
+    <button class="option" onclick="mark(this,false)">Perfect conductor only</button>
+  </div>
+  <div class="quizQ">
+    <b>2. In an insulator, the energy gap is generally:</b>
+    <button class="option" onclick="mark(this,true)">Large, greater than 3 eV</button>
+    <button class="option" onclick="mark(this,false)">Zero</button>
+    <button class="option" onclick="mark(this,false)">Always negative</button>
+  </div>
+  <div class="quizQ">
+    <b>3. Silicon and Germanium are examples of:</b>
+    <button class="option" onclick="mark(this,false)">Metals</button>
+    <button class="option" onclick="mark(this,true)">Elemental semiconductors</button>
+    <button class="option" onclick="mark(this,false)">Insulators only</button>
+  </div>
+  <p id="feedback" class="result"></p>
+</section>
+</main>
+</div>
+</div>
+
+<div class="footer">Made for Physics Tutor App • Clickable learning + NCERT exam style + visual understanding</div>
+
+<script>
+function showSec(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+  document.getElementById(id).style.display='block';
+  document.querySelectorAll('.sidebtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function showTab(id,btn){
+  btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function classify(v){
+  let r=document.getElementById('classResult');
+  if(v<33){r.textContent='Insulator: current is almost blocked'; r.style.color='#fca5a5';}
+  else if(v<70){r.textContent='Semiconductor: controlled current flow'; r.style.color='#fde68a';}
+  else{r.textContent='Conductor: current flows easily'; r.style.color='#86efac';}
+}
+function mark(btn,correct){
+  if(btn.classList.contains('correct')||btn.classList.contains('wrong')) return;
+  btn.classList.add(correct?'correct':'wrong');
+  document.getElementById('feedback').textContent = correct ? 'Correct ✅' : 'Not correct ❌ Try again.';
+}
+function speak(text){
+  const box=document.createElement('div');
+  box.className='card';
+  box.style.position='fixed';box.style.right='20px';box.style.bottom='20px';box.style.maxWidth='360px';box.style.zIndex='20';
+  box.innerHTML='<b>Explanation</b><p>'+text+'</p><button class="tab" onclick="this.parentElement.remove()">Close</button>';
+  document.body.appendChild(box);
+}
+</script>
+</body>
+</html>

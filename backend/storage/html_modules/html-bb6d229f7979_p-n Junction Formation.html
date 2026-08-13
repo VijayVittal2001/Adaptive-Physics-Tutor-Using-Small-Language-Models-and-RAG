@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>p-n Junction Formation - Step by Step Visual</title>
+<style>
+:root{
+  --bg:#020617;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;
+  --blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--pink:#fb7185;--red:#ef4444;--purple:#a78bfa;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+  background:radial-gradient(circle at 15% 8%,#164e63,transparent 35%),
+             radial-gradient(circle at 85% 18%,#581c87,transparent 30%),
+             linear-gradient(135deg,#020617,#0f172a 60%,#111827);
+}
+header{
+  text-align:center;padding:24px 16px;background:rgba(2,6,23,.88);
+  border-bottom:1px solid rgba(148,163,184,.25);position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)
+}
+h1{margin:0;font-size:clamp(24px,4vw,44px)}
+p,li{line-height:1.7}
+.wrap{max-width:1280px;margin:auto;padding:20px}
+.card{
+  background:rgba(15,23,42,.93);border:1px solid rgba(148,163,184,.22);border-radius:26px;
+  padding:22px;margin:18px 0;box-shadow:0 24px 60px rgba(0,0,0,.35)
+}
+.main{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+.visual{
+  min-height:700px;background:#020617;border:1px solid #334155;border-radius:24px;position:relative;overflow:hidden;
+  background-image:linear-gradient(rgba(56,189,248,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.08) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+.side{background:#020617;border:1px solid #334155;border-radius:24px;padding:20px}
+h2{color:#bae6fd;margin-top:0}
+h3{color:#c4b5fd}
+button{
+  border:0;border-radius:14px;padding:13px 16px;background:#1e293b;color:#fff;font-weight:900;cursor:pointer;margin:5px;
+  box-shadow:0 8px 20px rgba(0,0,0,.18)
+}
+button:hover{background:linear-gradient(90deg,#0284c7,#2563eb)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.region{
+  position:absolute;top:100px;height:470px;border-radius:20px;border:2px solid #334155;display:flex;align-items:flex-start;justify-content:center;
+  padding-top:18px;font-size:28px;font-weight:1000;letter-spacing:1px;transition:.5s
+}
+.pRegion{left:45px;width:330px;background:linear-gradient(180deg,rgba(251,113,133,.24),rgba(76,5,25,.32));color:#fecdd3}
+.nRegion{right:45px;width:330px;background:linear-gradient(180deg,rgba(34,197,94,.22),rgba(5,46,22,.32));color:#bbf7d0}
+.junctionLine{position:absolute;top:95px;bottom:125px;left:50%;width:4px;background:#facc15;box-shadow:0 0 22px #facc15;display:none;z-index:7}
+.depletion{
+  position:absolute;top:100px;bottom:130px;left:50%;transform:translateX(-50%);width:0;background:rgba(148,163,184,.18);
+  border-left:2px dashed #facc15;border-right:2px dashed #facc15;display:none;z-index:5;transition:1s
+}
+.charge{
+  position:absolute;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:1000;z-index:12;
+  transition:1s
+}
+.hole{border:3px dashed #fb7185;color:#fb7185;background:rgba(251,113,133,.12);box-shadow:0 0 20px rgba(251,113,133,.8)}
+.electron{background:radial-gradient(circle at 30% 30%,#fff,#38bdf8 38%,#1d4ed8);color:#082f49;box-shadow:0 0 20px rgba(56,189,248,.9)}
+.ionP{background:#22c55e;color:#052e16;box-shadow:0 0 18px rgba(34,197,94,.75)}
+.ionN{background:#fb7185;color:#fff1f2;box-shadow:0 0 18px rgba(251,113,133,.75)}
+.arrow{
+  position:absolute;padding:8px 12px;border-radius:999px;font-weight:900;display:none;z-index:20;box-shadow:0 0 20px rgba(34,197,94,.65)
+}
+.diffArrow{background:#064e3b;color:#bbf7d0;border:1px solid #22c55e}
+.driftArrow{background:#422006;color:#fef08a;border:1px solid #facc15}
+.fieldArrow{
+  position:absolute;left:50%;top:315px;transform:translateX(-50%);font-size:42px;color:#facc15;font-weight:1000;display:none;z-index:20;text-shadow:0 0 20px #facc15
+}
+.barrier{
+  position:absolute;left:50%;bottom:55px;transform:translateX(-50%);background:#422006;color:#fef08a;border:1px solid #facc15;
+  padding:12px 18px;border-radius:16px;font-weight:1000;display:none;z-index:20;box-shadow:0 0 22px rgba(250,204,21,.55)
+}
+.story{
+  background:#082f49;border-left:5px solid #38bdf8;border-radius:16px;padding:16px;margin-top:14px;font-size:17px
+}
+.stepNo{font-size:14px;color:#94a3b8;font-weight:900}
+.bigText{font-size:25px;font-weight:1000;color:#67e8f9;margin:8px 0}
+.flowBox{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.box{background:#111827;border:1px solid #334155;border-radius:18px;padding:14px}
+.formula{font-size:24px;font-weight:1000;color:#fef08a;text-align:center;padding:14px;border-radius:16px;background:#422006;margin:12px 0}
+.timeline{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.dot{padding:8px 10px;border-radius:999px;background:#1e293b;color:#94a3b8;font-weight:900;cursor:pointer}
+.dot.active{background:#0284c7;color:white}
+.exam{background:linear-gradient(135deg,#1e1b4b,#0f172a);border-left:5px solid #38bdf8}
+.table{width:100%;border-collapse:collapse;margin-top:10px}
+.table th,.table td{border:1px solid #334155;padding:12px;text-align:left}
+.table th{background:#1e293b;color:#bae6fd}
+.legend{position:absolute;bottom:18px;left:45px;right:45px;background:rgba(15,23,42,.85);border:1px solid #334155;border-radius:18px;padding:12px;display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.miniDot{width:18px;height:18px;border-radius:50%;display:inline-block}
+@media(max-width:930px){.main,.flowBox{grid-template-columns:1fr}.visual{min-height:710px}.pRegion,.nRegion{width:43%}.pRegion{left:20px}.nRegion{right:20px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>p-n Junction Formation: Step-by-Step Visualization</h1>
+  <p style="color:#94a3b8;margin:8px 0 0">p-type + n-type → diffusion → depletion region → electric field → barrier potential → equilibrium</p>
+</header>
+
+<div class="wrap">
+<section class="card main">
+  <div class="visual" id="visual">
+    <div class="region pRegion">p-type<br><small style="font-size:15px;color:#fecdd3">many holes</small></div>
+    <div class="region nRegion">n-type<br><small style="font-size:15px;color:#bbf7d0">many electrons</small></div>
+    <div class="junctionLine" id="junctionLine"></div>
+    <div class="depletion" id="depletion"></div>
+    <div class="fieldArrow" id="fieldArrow">Electric Field: n → p</div>
+    <div class="barrier" id="barrier">Barrier Potential formed</div>
+
+    <div class="arrow diffArrow" id="holeDiff" style="left:265px;top:250px">holes diffuse p → n</div>
+    <div class="arrow diffArrow" id="electronDiff" style="right:250px;top:385px">electrons diffuse n → p</div>
+    <div class="arrow driftArrow" id="drift" style="left:260px;top:455px">drift current opposes diffusion</div>
+
+    <div class="legend">
+      <span><span class="miniDot" style="border:2px dashed #fb7185"></span> Hole</span>
+      <span><span class="miniDot" style="background:#38bdf8"></span> Electron</span>
+      <span><span class="miniDot" style="background:#22c55e"></span> Positive donor ion</span>
+      <span><span class="miniDot" style="background:#fb7185"></span> Negative acceptor ion</span>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="stepNo" id="stepNo">STEP 1 OF 8</div>
+    <div class="bigText" id="title">Separate p-type and n-type Regions</div>
+    <div class="timeline" id="timeline"></div>
+
+    <div class="controls">
+      <button onclick="prevStep()">⬅ Previous</button>
+      <button onclick="nextStep()">Next ➡</button>
+      <button onclick="autoPlay()">▶ Auto Play</button>
+      <button onclick="resetAll()">🔄 Reset</button>
+    </div>
+
+    <div class="story">
+      <h3>What is happening?</h3>
+      <p id="what"></p>
+      <h3>Why?</h3>
+      <p id="why"></p>
+      <h3>Exam point</h3>
+      <p id="exam"></p>
+    </div>
+
+    <div class="flowBox">
+      <div class="box"><b>Diffusion Current</b><div class="bigText" id="diffusion">No</div></div>
+      <div class="box"><b>Drift Current</b><div class="bigText" id="driftStat">No</div></div>
+    </div>
+
+    <div class="formula" id="formula">p-type + n-type</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Simple Theory</h2>
+  <p>A <b>p-n junction</b> is formed when a p-type region and an n-type region are created in the same semiconductor crystal.</p>
+  <p>In the n-type region, electrons are majority carriers. In the p-type region, holes are majority carriers. Because of concentration difference, electrons diffuse from n-side to p-side and holes diffuse from p-side to n-side.</p>
+  <p>When electrons leave the n-side, positive donor ions remain near the junction. When holes leave the p-side, negative acceptor ions remain near the junction. This region becomes free from mobile charge carriers and is called the <b>depletion region</b>.</p>
+  <p>The fixed ions create an electric field from n-side to p-side. This field produces drift current opposite to diffusion current. At equilibrium, diffusion current becomes equal to drift current, so net current is zero.</p>
+</section>
+
+<section class="card exam">
+  <h2>Board Exam Answer</h2>
+  <p>A p-n junction is formed by creating p-type and n-type regions in the same semiconductor crystal. During formation, holes diffuse from p-side to n-side and electrons diffuse from n-side to p-side due to concentration gradient. This gives rise to diffusion current.</p>
+  <p>When electrons diffuse from n-side to p-side, they leave behind immobile positive donor ions on the n-side. Similarly, when holes diffuse from p-side to n-side, they leave behind immobile negative acceptor ions on the p-side. The region near the junction becomes depleted of free charge carriers and is called the depletion region.</p>
+  <p>Due to positive ions on n-side and negative ions on p-side, an electric field is set up from n-side to p-side. This produces drift current opposite to diffusion current. At equilibrium, diffusion current equals drift current and no net current flows across the junction.</p>
+
+  <table class="table">
+    <tr><th>Term</th><th>Meaning</th></tr>
+    <tr><td>Diffusion</td><td>Movement of carriers from high concentration to low concentration</td></tr>
+    <tr><td>Depletion region</td><td>Region near junction depleted of free electrons and holes</td></tr>
+    <tr><td>Drift</td><td>Motion of carriers due to electric field</td></tr>
+    <tr><td>Barrier potential</td><td>Potential developed across junction that opposes further diffusion</td></tr>
+  </table>
+</section>
+</div>
+
+<script>
+const visual=document.getElementById('visual');
+let step=1,timer=null,charges=[];
+const holesStart=[[120,185],[190,245],[120,335],[230,400],[170,505]];
+const electronsStart=[[610,180],[535,250],[655,330],[560,410],[625,500]];
+
+function makeCharge(cls,txt,x,y,id){
+  const c=document.createElement('div');
+  c.className='charge '+cls; c.textContent=txt; c.style.left=x+'px'; c.style.top=y+'px';
+  if(id)c.id=id;
+  visual.appendChild(c); charges.push(c); return c;
+}
+function init(){
+  holesStart.forEach((p,i)=>makeCharge('hole','h⁺',p[0],p[1],'h'+i));
+  electronsStart.forEach((p,i)=>makeCharge('electron','e⁻',p[0],p[1],'e'+i));
+  buildTimeline(); renderStep();
+}
+function buildTimeline(){
+  timeline.innerHTML='';
+  for(let i=1;i<=8;i++){
+    const d=document.createElement('div'); d.className='dot'; d.id='dot'+i; d.textContent=i;
+    d.onclick=()=>{step=i;renderStep()}; timeline.appendChild(d);
+  }
+}
+function clean(){
+  charges.forEach(c=>c.remove()); charges=[];
+  holesStart.forEach((p,i)=>makeCharge('hole','h⁺',p[0],p[1],'h'+i));
+  electronsStart.forEach((p,i)=>makeCharge('electron','e⁻',p[0],p[1],'e'+i));
+  junctionLine.style.display='none'; depletion.style.display='none'; depletion.style.width='0';
+  fieldArrow.style.display='none'; barrier.style.display='none';
+  holeDiff.style.display='none'; electronDiff.style.display='none'; drift.style.display='none';
+  diffusion.textContent='No'; driftStat.textContent='No'; formula.textContent='p-type + n-type';
+}
+function renderStep(){
+  clean();
+  document.querySelectorAll('.dot').forEach(d=>d.classList.remove('active'));
+  document.getElementById('dot'+step).classList.add('active');
+  stepNo.textContent='STEP '+step+' OF 8';
+
+  if(step===1){
+    title.textContent='Separate p-type and n-type Regions';
+    what.textContent='Left side is p-type with many holes. Right side is n-type with many electrons.';
+    why.textContent='p-type has holes as majority carriers. n-type has electrons as majority carriers.';
+    exam.textContent='p-type + n-type region forms the base of a p-n junction.';
+    formula.textContent='p-side: holes | n-side: electrons';
+  }
+
+  if(step===2){
+    junctionLine.style.display='block';
+    title.textContent='Junction is Created';
+    what.textContent='p-type and n-type regions are now joined in the same semiconductor crystal.';
+    why.textContent='There is a large concentration difference: many holes on p-side and many electrons on n-side.';
+    exam.textContent='A p-n junction is formed when p-type and n-type regions are made in the same crystal.';
+    formula.textContent='Concentration gradient appears';
+  }
+
+  if(step===3){
+    junctionLine.style.display='block';
+    h0.style.left='390px'; h1.style.left='420px';
+    e0.style.left='335px'; e1.style.left='310px';
+    holeDiff.style.display='block'; electronDiff.style.display='block';
+    diffusion.textContent='Yes';
+    title.textContent='Diffusion Starts';
+    what.textContent='Holes move from p-side to n-side. Electrons move from n-side to p-side.';
+    why.textContent='Carriers move from high concentration region to low concentration region.';
+    exam.textContent='This movement due to concentration gradient is called diffusion.';
+    formula.textContent='Holes: p → n | Electrons: n → p';
+  }
+
+  if(step===4){
+    junctionLine.style.display='block';
+    h0.style.left='390px'; h1.style.left='420px';
+    e0.style.left='335px'; e1.style.left='310px';
+    makeCharge('ionN','−',260,210,'a1'); makeCharge('ionN','−',260,330,'a2'); makeCharge('ionN','−',300,455,'a3');
+    makeCharge('ionP','+',455,210,'d1'); makeCharge('ionP','+',455,330,'d2'); makeCharge('ionP','+',420,455,'d3');
+    diffusion.textContent='Yes';
+    title.textContent='Fixed Ions are Left Behind';
+    what.textContent='When holes leave p-side, negative acceptor ions remain. When electrons leave n-side, positive donor ions remain.';
+    why.textContent='Dopant ions are fixed in the crystal; they cannot move like electrons or holes.';
+    exam.textContent='Immobile ions appear near the junction: negative ions on p-side and positive ions on n-side.';
+    formula.textContent='Fixed ions near junction';
+  }
+
+  if(step===5){
+    junctionLine.style.display='block'; depletion.style.display='block'; depletion.style.width='175px';
+    makeCharge('ionN','−',270,205); makeCharge('ionN','−',270,330); makeCharge('ionN','−',300,455);
+    makeCharge('ionP','+',455,205); makeCharge('ionP','+',455,330); makeCharge('ionP','+',425,455);
+    diffusion.textContent='Yes';
+    title.textContent='Depletion Region Forms';
+    what.textContent='Near the junction, free electrons and holes disappear due to recombination. Only fixed ions remain.';
+    why.textContent='This region is depleted of mobile charge carriers, so it is called depletion region.';
+    exam.textContent='Depletion region is the region near junction without free electrons and holes.';
+    formula.textContent='Depleted of mobile carriers';
+  }
+
+  if(step===6){
+    junctionLine.style.display='block'; depletion.style.display='block'; depletion.style.width='200px'; fieldArrow.style.display='block';
+    makeCharge('ionN','−',270,205); makeCharge('ionN','−',270,330); makeCharge('ionN','−',300,455);
+    makeCharge('ionP','+',455,205); makeCharge('ionP','+',455,330); makeCharge('ionP','+',425,455);
+    diffusion.textContent='Yes';
+    title.textContent='Electric Field is Produced';
+    what.textContent='Positive donor ions on n-side and negative acceptor ions on p-side create an electric field.';
+    why.textContent='Electric field direction is from positive charge to negative charge, so it points from n-side to p-side.';
+    exam.textContent='Electric field is directed from n-side to p-side across the depletion region.';
+    formula.textContent='Electric field: n → p';
+  }
+
+  if(step===7){
+    junctionLine.style.display='block'; depletion.style.display='block'; depletion.style.width='220px'; fieldArrow.style.display='block'; drift.style.display='block'; barrier.style.display='block';
+    makeCharge('ionN','−',270,205); makeCharge('ionN','−',270,330); makeCharge('ionN','−',300,455);
+    makeCharge('ionP','+',455,205); makeCharge('ionP','+',455,330); makeCharge('ionP','+',425,455);
+    diffusion.textContent='Yes'; driftStat.textContent='Yes';
+    title.textContent='Drift Current Opposes Diffusion';
+    what.textContent='The electric field pushes minority carriers in a direction opposite to diffusion current.';
+    why.textContent='This field creates drift current. Drift current opposes diffusion current.';
+    exam.textContent='Drift current is opposite in direction to diffusion current.';
+    formula.textContent='Diffusion current ↔ Drift current';
+  }
+
+  if(step===8){
+    junctionLine.style.display='block'; depletion.style.display='block'; depletion.style.width='240px'; fieldArrow.style.display='block'; barrier.style.display='block';
+    makeCharge('ionN','−',270,205); makeCharge('ionN','−',270,330); makeCharge('ionN','−',300,455);
+    makeCharge('ionP','+',455,205); makeCharge('ionP','+',455,330); makeCharge('ionP','+',425,455);
+    diffusion.textContent='Equal'; driftStat.textContent='Equal';
+    title.textContent='Equilibrium: No Net Current';
+    what.textContent='Finally, diffusion current becomes equal to drift current.';
+    why.textContent='When both currents balance each other, there is no net current across the junction.';
+    exam.textContent='At equilibrium in a p-n junction, diffusion current equals drift current and net current is zero.';
+    formula.textContent='Idiffusion = Idrift → Inet = 0';
+  }
+}
+function nextStep(){step=step<8?step+1:8;renderStep()}
+function prevStep(){step=step>1?step-1:1;renderStep()}
+function resetAll(){clearInterval(timer);step=1;renderStep()}
+function autoPlay(){
+  clearInterval(timer);step=1;renderStep();
+  timer=setInterval(()=>{if(step>=8){clearInterval(timer)}else{step++;renderStep()}},2900);
+}
+init();
+</script>
+</body>
+</html>

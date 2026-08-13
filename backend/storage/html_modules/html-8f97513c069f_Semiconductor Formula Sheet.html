@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Semiconductor Formula Sheet</title>
+<script>
+window.MathJax = {tex:{inlineMath:[['$','$'],['\\(','\\)']]}, svg:{fontCache:'global'}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#020617;color:#e5e7eb}
+header{text-align:center;padding:24px;background:#0f172a;border-bottom:1px solid #334155}
+.wrap{max-width:1100px;margin:auto;padding:20px}
+.card{background:#0f172a;border:1px solid #334155;border-radius:20px;padding:20px;margin:16px 0}
+h1{margin:0;font-size:36px}h2{color:#bae6fd}h3{color:#c4b5fd}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.formula{background:#020617;border:1px solid #334155;border-radius:18px;padding:18px}
+.eq{font-size:24px;color:#fef08a;background:#422006;border-radius:14px;padding:14px;text-align:center;overflow-x:auto}
+.tag{display:inline-block;background:#1e293b;color:#dbeafe;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:bold}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.eq{font-size:19px}}
+</style>
+</head>
+<body>
+<header>
+<h1>Semiconductor Formula Sheet</h1>
+<p>Only important formulas from Semiconductor chapter</p>
+</header>
+
+<div class="wrap">
+
+<div class="card">
+<h2>1. Semiconductor Basic Formulae</h2>
+<div class="grid">
+
+<div class="formula"><span class="tag">Energy Gap</span><h3>Forbidden Energy Gap</h3><div class="eq">$E_g=h\\nu=\\dfrac{hc}{\\lambda}$</div></div>
+
+<div class="formula"><span class="tag">Intrinsic</span><h3>Intrinsic Carrier Concentration</h3><div class="eq">$n_i^2=A_0T^3e^{-E_g/kT}$</div></div>
+
+<div class="formula"><span class="tag">Conductivity</span><h3>General Conductivity</h3><div class="eq">$\\sigma=e(n_e\\mu_e+n_h\\mu_h)$</div></div>
+
+<div class="formula"><span class="tag">Intrinsic</span><h3>Intrinsic Conductivity</h3><div class="eq">$\\sigma_i=n_ie(\\mu_e+\\mu_h)$</div></div>
+
+<div class="formula"><span class="tag">n-type</span><h3>n-type Conductivity</h3><div class="eq">$\\sigma_n=eN_D\\mu_e$</div></div>
+
+<div class="formula"><span class="tag">p-type</span><h3>p-type Conductivity</h3><div class="eq">$\\sigma_p=eN_A\\mu_h$</div></div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>2. Junction Diode Formulae</h2>
+<div class="grid">
+
+<div class="formula"><span class="tag">Diode Equation</span><h3>Current in Junction Diode</h3><div class="eq">$I=I_0(e^{eV/kT}-1)$</div></div>
+
+<div class="formula"><span class="tag">Forward Bias</span><h3>Forward Current</h3><div class="eq">$I_f=I_0e^{eV/kT}$</div></div>
+
+<div class="formula"><span class="tag">Reverse Bias</span><h3>Reverse Current</h3><div class="eq">$I_r=-I_0$</div></div>
+
+<div class="formula"><span class="tag">Dynamic Resistance</span><h3>Dynamic Resistance</h3><div class="eq">$r_d=\\dfrac{\\Delta V}{\\Delta I}$</div></div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>3. Half-Wave Rectifier Formulae</h2>
+<div class="grid">
+
+<div class="formula"><span class="tag">Half-wave</span><h3>Peak Current</h3><div class="eq">$I_m=\\dfrac{V_m}{r_f+R_L}$</div></div>
+
+<div class="formula"><span class="tag">Half-wave</span><h3>RMS Current</h3><div class="eq">$I_{rms}=\\dfrac{I_m}{2}$</div></div>
+
+<div class="formula"><span class="tag">Half-wave</span><h3>DC Current</h3><div class="eq">$I_{dc}=\\dfrac{I_m}{\\pi}$</div></div>
+
+<div class="formula"><span class="tag">Half-wave</span><h3>Peak Inverse Voltage</h3><div class="eq">$PIV=V_m$</div></div>
+
+<div class="formula"><span class="tag">Half-wave</span><h3>DC Voltage</h3><div class="eq">$V_{dc}=I_{dc}R_L=\\dfrac{I_m}{\\pi}R_L$</div></div>
+
+<div class="formula"><span class="tag">Half-wave</span><h3>Ripple Factor</h3><div class="eq">$r=1.21$</div></div>
+
+<div class="formula"><span class="tag">Half-wave</span><h3>Form Factor</h3><div class="eq">$\\dfrac{I_{rms}}{I_{dc}}=\\dfrac{\\pi}{2}=1.57$</div></div>
+
+<div class="formula"><span class="tag">Half-wave</span><h3>Efficiency</h3><div class="eq">$\\eta=\\dfrac{40.6}{1+r_f/R_L}\\%$</div></div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>4. Full-Wave Rectifier Formulae</h2>
+<div class="grid">
+
+<div class="formula"><span class="tag">Full-wave</span><h3>Peak Current</h3><div class="eq">$I_m=\\dfrac{V_m}{r_f+R_L}$</div></div>
+
+<div class="formula"><span class="tag">Full-wave</span><h3>DC Current</h3><div class="eq">$I_{dc}=\\dfrac{2I_m}{\\pi}$</div></div>
+
+<div class="formula"><span class="tag">Full-wave</span><h3>RMS Current</h3><div class="eq">$I_{rms}=\\dfrac{I_m}{\\sqrt2}$</div></div>
+
+<div class="formula"><span class="tag">Full-wave</span><h3>Peak Inverse Voltage</h3><div class="eq">$PIV=2V_m$</div></div>
+
+<div class="formula"><span class="tag">Full-wave</span><h3>DC Voltage</h3><div class="eq">$V_{dc}=I_{dc}R_L=\\dfrac{2I_m}{\\pi}R_L$</div></div>
+
+<div class="formula"><span class="tag">Full-wave</span><h3>Ripple Factor</h3><div class="eq">$r=0.482$</div></div>
+
+<div class="formula"><span class="tag">Full-wave</span><h3>Form Factor</h3><div class="eq">$\\dfrac{I_{rms}}{I_{dc}}=\\dfrac{\\pi}{2\\sqrt2}=1.11$</div></div>
+
+<div class="formula"><span class="tag">Full-wave</span><h3>Efficiency</h3><div class="eq">$\\eta=\\dfrac{81.2}{1+r_f/R_L}\\%$</div></div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>5. Common Rectifier Formulae</h2>
+<div class="grid">
+
+<div class="formula"><span class="tag">Ripple Factor</span><h3>General Ripple Factor</h3><div class="eq">$r=\\sqrt{\\left(\\dfrac{I_{rms}}{I_{dc}}\\right)^2-1}$</div></div>
+
+<div class="formula"><span class="tag">Form Factor</span><h3>Form Factor</h3><div class="eq">$Form\\ Factor=\\dfrac{I_{rms}}{I_{dc}}$</div></div>
+
+<div class="formula"><span class="tag">Power</span><h3>DC Power</h3><div class="eq">$P_{dc}=I_{dc}^{2}R_L$</div></div>
+
+<div class="formula"><span class="tag">Power</span><h3>AC Input Power</h3><div class="eq">$P_{ac}=I_{rms}^{2}(r_f+R_L)$</div></div>
+
+<div class="formula"><span class="tag">Efficiency</span><h3>Rectification Efficiency</h3><div class="eq">$\\eta=\\dfrac{P_{dc}}{P_{ac}}\\times100\\%$</div></div>
+
+</div>
+</div>
+
+</div>
+</body>
+</html>

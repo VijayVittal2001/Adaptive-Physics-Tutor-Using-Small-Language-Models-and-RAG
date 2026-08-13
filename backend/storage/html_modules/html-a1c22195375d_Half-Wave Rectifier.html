@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Half-Wave Rectifier - Step by Step Visual</title>
+<style>
+:root{--bg:#020617;--card:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#ef4444;--pink:#fb7185}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% 6%,rgba(56,189,248,.28),transparent 30%),radial-gradient(circle at 90% 14%,rgba(34,197,94,.25),transparent 28%),linear-gradient(135deg,#020617,#0f172a 58%,#111827)}
+header{text-align:center;padding:24px 16px;background:rgba(2,6,23,.9);border-bottom:1px solid rgba(148,163,184,.25);position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)}
+h1{margin:0;font-size:clamp(24px,4vw,44px)}p,li{line-height:1.7}
+.wrap{max-width:1320px;margin:auto;padding:20px}
+.card{background:rgba(15,23,42,.94);border:1px solid rgba(148,163,184,.22);border-radius:28px;padding:22px;margin:18px 0;box-shadow:0 24px 70px rgba(0,0,0,.38)}
+.main{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
+.visual{min-height:735px;background:#020617;border:1px solid #334155;border-radius:26px;position:relative;overflow:hidden;background-image:linear-gradient(rgba(56,189,248,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.07) 1px,transparent 1px);background-size:42px 42px}
+.side{background:#020617;border:1px solid #334155;border-radius:26px;padding:20px}
+h2{color:#bae6fd;margin-top:0}h3{color:#c4b5fd}
+button{border:0;border-radius:14px;padding:13px 16px;background:#1e293b;color:#fff;font-weight:900;cursor:pointer;margin:5px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+button:hover{background:linear-gradient(90deg,#0284c7,#16a34a)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.component{position:absolute;border:3px solid #64748b;background:#0f172a;color:#e5e7eb;display:flex;align-items:center;justify-content:center;font-weight:1000;z-index:10}
+.ac{left:55px;top:245px;width:120px;height:120px;border-radius:50%;font-size:30px;color:#67e8f9;box-shadow:0 0 25px rgba(56,189,248,.45)}
+.diode{left:310px;top:270px;width:150px;height:75px;border-radius:18px;color:#fef08a}
+.load{right:90px;top:238px;width:95px;height:165px;border-radius:16px;color:#fed7aa}
+.wire{position:absolute;background:#64748b;z-index:5}
+.wire.on{background:#22c55e;box-shadow:0 0 18px #22c55e}
+.w1{left:175px;top:303px;width:135px;height:8px}.w2{left:460px;top:303px;right:185px;height:8px}.w3{right:132px;top:403px;width:8px;height:105px}.w4{left:115px;right:132px;top:508px;height:8px}.w5{left:115px;top:365px;width:8px;height:143px}.w6{left:115px;top:365px;width:60px;height:8px}
+.currentDot{position:absolute;width:26px;height:26px;border-radius:50%;background:#22c55e;box-shadow:0 0 22px #22c55e;display:none;z-index:30;animation:flow 3.2s linear infinite}
+@keyframes flow{
+0%{left:175px;top:294px}25%{left:475px;top:294px}45%{left:680px;top:294px}60%{left:680px;top:500px}85%{left:130px;top:500px}100%{left:130px;top:365px}
+}
+.block{position:absolute;left:340px;top:250px;font-size:88px;color:#ef4444;text-shadow:0 0 22px #ef4444;display:none;z-index:40}
+.lamp{position:absolute;right:96px;top:430px;width:80px;height:80px;border-radius:50%;border:4px solid #475569;background:#111827;display:flex;align-items:center;justify-content:center;font-size:40px;z-index:20}
+.lamp.on{background:radial-gradient(circle,#fef3c7,#facc15 42%,#854d0e);box-shadow:0 0 60px #facc15}
+.wavebox{position:absolute;left:45px;right:45px;bottom:30px;height:155px;background:#0f172a;border:1px solid #334155;border-radius:22px;padding:10px}
+.waveTitle{position:absolute;top:10px;color:#bae6fd;font-weight:900}
+svg{width:100%;height:100%}
+.inputWave{fill:none;stroke:#38bdf8;stroke-width:4}
+.outputWave{fill:none;stroke:#22c55e;stroke-width:5}
+.zeroLine{stroke:#64748b;stroke-width:2}
+.marker{fill:#facc15;stroke:#fff;stroke-width:2}
+.label{fill:#e5e7eb;font-size:13px;font-weight:800}
+.badge{position:absolute;padding:8px 12px;border-radius:999px;font-weight:1000;display:none;z-index:25}
+.good{background:#064e3b;color:#bbf7d0;border:1px solid #22c55e}
+.bad{background:#7f1d1d;color:#fecaca;border:1px solid #ef4444}
+.story{background:#082f49;border-left:5px solid #38bdf8;border-radius:16px;padding:16px;margin-top:14px;font-size:17px}
+.stepNo{font-size:14px;color:#94a3b8;font-weight:900}
+.bigText{font-size:25px;font-weight:1000;color:#67e8f9;margin:8px 0}
+.flowBox{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.box{background:#111827;border:1px solid #334155;border-radius:18px;padding:14px}
+.formula{font-size:23px;font-weight:1000;color:#fef08a;text-align:center;padding:14px;border-radius:16px;background:#422006;margin:12px 0}
+.timeline{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.dot{padding:8px 10px;border-radius:999px;background:#1e293b;color:#94a3b8;font-weight:900;cursor:pointer}.dot.active{background:#0284c7;color:white}
+.progress{height:11px;background:#1e293b;border-radius:999px;overflow:hidden;margin:12px 0}.progressFill{height:100%;width:12.5%;background:linear-gradient(90deg,#38bdf8,#22c55e,#facc15);transition:.4s}
+.exam{background:linear-gradient(135deg,#1e1b4b,#0f172a);border-left:5px solid #38bdf8}
+.table{width:100%;border-collapse:collapse;margin-top:10px}.table th,.table td{border:1px solid #334155;padding:12px;text-align:left}.table th{background:#1e293b;color:#bae6fd}
+@media(max-width:960px){.main,.flowBox{grid-template-columns:1fr}.visual{min-height:735px}}
+</style>
+</head>
+<body>
+<header>
+<h1>Half-Wave Rectifier: Step-by-Step Visual</h1>
+<p style="color:#94a3b8;margin:8px 0 0">AC input → diode conducts only positive half cycle → pulsating DC output</p>
+</header>
+
+<div class="wrap">
+<section class="card main">
+<div class="visual">
+<div class="component ac">AC<br>~</div>
+<div class="component diode" id="diode">Diode ▶|</div>
+<div class="component load">R<sub>L</sub><br>Load</div>
+<div class="wire w1"></div><div class="wire w2"></div><div class="wire w3"></div><div class="wire w4"></div><div class="wire w5"></div><div class="wire w6"></div>
+<div class="currentDot" id="dotFlow"></div>
+<div class="block" id="block">✕</div>
+<div class="lamp" id="lamp">💡</div>
+<div class="badge good" id="conductBadge" style="left:300px;top:190px">Diode forward biased: ON</div>
+<div class="badge bad" id="blockBadge" style="left:290px;top:190px">Diode reverse biased: OFF</div>
+
+<div class="wavebox">
+<div class="waveTitle">Input AC and Output across Load</div>
+<svg viewBox="0 0 780 130">
+<line x1="30" y1="65" x2="750" y2="65" class="zeroLine"/>
+<path d="M30 65 C70 15,110 15,150 65 C190 115,230 115,270 65 C310 15,350 15,390 65 C430 115,470 115,510 65 C550 15,590 15,630 65 C670 115,710 115,750 65" class="inputWave" opacity=".55"/>
+<path id="outWave" d="" class="outputWave"/>
+<circle id="wavePoint" cx="30" cy="65" r="0" class="marker"/>
+<text x="34" y="20" class="label" fill="#38bdf8">Input AC</text>
+<text x="34" y="118" class="label" fill="#22c55e">Output</text>
+</svg>
+</div>
+</div>
+
+<div class="side">
+<div class="stepNo" id="stepNo">STEP 1 OF 7</div>
+<div class="bigText" id="title">Circuit Setup</div>
+<div class="timeline" id="timeline"></div>
+<div class="progress"><div class="progressFill" id="progressFill"></div></div>
+<div class="controls">
+<button onclick="prevStep()">⬅ Previous</button>
+<button onclick="nextStep()">Next ➡</button>
+<button onclick="autoPlay()">▶ Auto Play</button>
+<button onclick="resetAll()">🔄 Reset</button>
+</div>
+<div class="story">
+<h3>What is happening?</h3><p id="what"></p>
+<h3>Why?</h3><p id="why"></p>
+<h3>Exam point</h3><p id="exam"></p>
+</div>
+<div class="flowBox">
+<div class="box"><b>Diode State</b><div class="bigText" id="diodeStat">-</div></div>
+<div class="box"><b>Output</b><div class="bigText" id="outStat">-</div></div>
+</div>
+<div class="formula" id="formula">AC → Pulsating DC</div>
+</div>
+</section>
+
+<section class="card">
+<h2>Simple Theory</h2>
+<p>A <b>half-wave rectifier</b> is a circuit that converts AC into pulsating DC using one p-n junction diode.</p>
+<p>During the <b>positive half cycle</b> of AC, the diode is forward biased. Current flows through the load resistor and output voltage appears across the load.</p>
+<p>During the <b>negative half cycle</b> of AC, the diode is reverse biased. The diode blocks current and output voltage becomes zero.</p>
+<p>Since only one half of the AC waveform appears at the output, it is called a <b>half-wave rectifier</b>.</p>
+</section>
+
+<section class="card exam">
+<h2>Board Exam Answer</h2>
+<p>A half-wave rectifier is a circuit used to convert alternating current into pulsating direct current using a p-n junction diode.</p>
+<p>During the positive half cycle of AC input, the diode is forward biased and conducts. Current flows through the load resistor R<sub>L</sub>, so output voltage is obtained across R<sub>L</sub>.</p>
+<p>During the negative half cycle, the diode is reverse biased and does not conduct. Hence no current flows through the load and output voltage is zero.</p>
+<p>Thus, only one half cycle of the AC input is obtained at the output. Therefore, the circuit is called a half-wave rectifier.</p>
+<table class="table">
+<tr><th>Input cycle</th><th>Diode condition</th><th>Output</th></tr>
+<tr><td>Positive half cycle</td><td>Forward biased</td><td>Current flows, output appears</td></tr>
+<tr><td>Negative half cycle</td><td>Reverse biased</td><td>No current, output is zero</td></tr>
+</table>
+</section>
+</div>
+
+<script>
+let step=1,timer=null;
+const outPaths=[
+"", "", 
+"M30 65 C70 15,110 15,150 65", 
+"M30 65 C70 15,110 15,150 65 L270 65",
+"M30 65 C70 15,110 15,150 65 L270 65 C310 15,350 15,390 65",
+"M30 65 C70 15,110 15,150 65 L270 65 C310 15,350 15,390 65 L510 65",
+"M30 65 C70 15,110 15,150 65 L270 65 C310 15,350 15,390 65 L510 65 C550 15,590 15,630 65 L750 65"
+];
+const data=[
+{t:"Circuit Setup",w:"The circuit has an AC source, one diode, and a load resistor RL.",why:"The diode acts like a one-way gate for current.",e:"Half-wave rectifier uses one diode.",d:"Ready",o:"No output",f:"AC input applied"},
+{t:"Positive Half Cycle Begins",w:"The upper terminal of AC becomes positive. The diode anode is positive with respect to cathode.",why:"This makes the diode forward biased.",e:"In positive half cycle, diode is forward biased.",d:"ON",o:"Starts",f:"Positive half cycle → diode ON"},
+{t:"Current Flows Through Load",w:"Current flows through diode and load resistor RL. The bulb glows.",why:"Forward biased diode has low resistance and allows current.",e:"Output voltage appears across RL during positive half cycle.",d:"ON",o:"Positive pulse",f:"Current flows"},
+{t:"Negative Half Cycle Begins",w:"The AC polarity reverses. The diode anode becomes negative with respect to cathode.",why:"This makes the diode reverse biased.",e:"In negative half cycle, diode is reverse biased.",d:"OFF",o:"Zero",f:"Negative half cycle → diode OFF"},
+{t:"Diode Blocks Current",w:"No current flows through the load. Output voltage becomes zero.",why:"Reverse biased diode offers very high resistance.",e:"No output is obtained during negative half cycle.",d:"OFF",o:"0 V",f:"Current blocked"},
+{t:"Next Positive Cycle Repeats",w:"When AC becomes positive again, the diode conducts again.",why:"The diode allows only positive half cycles repeatedly.",e:"The output is unidirectional but pulsating.",d:"ON again",o:"Positive pulse",f:"Pulsating DC"},
+{t:"Final Output Waveform",w:"Only positive half cycles appear at the output. Negative half cycles are removed.",why:"The diode conducts in one direction only.",e:"This is called half-wave rectification because only half of the input wave is used.",d:"One-way",o:"Pulsating DC",f:"AC → half-wave DC"}
+];
+function buildTimeline(){timeline.innerHTML='';for(let i=1;i<=7;i++){let d=document.createElement('div');d.className='dot';d.id='dot'+i;d.textContent=i;d.onclick=()=>{step=i;renderStep()};timeline.appendChild(d)}}
+function clean(){document.querySelectorAll('.wire').forEach(w=>w.classList.remove('on'));dotFlow.style.display='none';block.style.display='none';lamp.classList.remove('on');conductBadge.style.display='none';blockBadge.style.display='none';wavePoint.setAttribute('r',0)}
+function renderStep(){
+clean();let d=data[step-1];
+document.querySelectorAll('.dot').forEach(x=>x.classList.remove('active'));document.getElementById('dot'+step).classList.add('active');
+stepNo.textContent='STEP '+step+' OF 7';progressFill.style.width=(step/7*100)+'%';
+title.textContent=d.t;what.textContent=d.w;why.textContent=d.why;exam.textContent=d.e;diodeStat.textContent=d.d;outStat.textContent=d.o;formula.textContent=d.f;
+outWave.setAttribute('d',outPaths[step-1]);
+if([2,3,6,7].includes(step)){document.querySelectorAll('.wire').forEach(w=>w.classList.add('on'));dotFlow.style.display='block';lamp.classList.add('on');conductBadge.style.display='block';wavePoint.setAttribute('r',8);wavePoint.setAttribute('cx', step===2?80:step===3?150:step===6?390:630);wavePoint.setAttribute('cy', step===2?28:step===3?65:step===6?65:65)}
+if([4,5].includes(step)){block.style.display='block';blockBadge.style.display='block';wavePoint.setAttribute('r',8);wavePoint.setAttribute('cx', step===4?270:510);wavePoint.setAttribute('cy',65)}
+}
+function nextStep(){step=step<7?step+1:7;renderStep()}
+function prevStep(){step=step>1?step-1:1;renderStep()}
+function resetAll(){clearInterval(timer);step=1;renderStep()}
+function autoPlay(){clearInterval(timer);step=1;renderStep();timer=setInterval(()=>{if(step>=7){clearInterval(timer)}else{step++;renderStep()}},3000)}
+buildTimeline();renderStep();
+</script>
+</body>
+</html>

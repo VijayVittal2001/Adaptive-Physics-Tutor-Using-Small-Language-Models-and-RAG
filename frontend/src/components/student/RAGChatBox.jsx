@@ -1,0 +1,39 @@
+import React, { useState } from 'react';
+import { Send, Bot, User, BookOpen, PlayCircle, PenTool, AlertCircle, Cpu, LayoutTemplate, Hand } from 'lucide-react';
+import { ragService } from '../../services/ragService';
+
+export const RAGChatBox = ({ defaultTopic, chapterId, topicId, onWatchVideo, onPracticeTest, onVisualize, onSimulator, onDiagram }) => {
+  const [query, setQuery] = useState('');
+  const [messages, setMessages] = useState([
+    { role: 'assistant', text: `Ask a doubt from the uploaded PDF${defaultTopic ? `: ${defaultTopic}` : ''}. I will answer only from the processed knowledge base.`, meta: null }
+  ]);
+  const [isSynthesizing, setIsSynthesizing] = useState(false);
+
+  const ask = async (text) => {
+    if (!text.trim()) return;
+    setMessages(prev => [...prev, { role: 'user', text, meta: null }]);
+    setQuery(''); setIsSynthesizing(true);
+    try {
+      const res = await ragService.askQuestion(text, { chapter_id: chapterId || 'all', topic_id: 'all', top_k: 3 });
+      const ans = res.data;
+      setMessages(prev => [...prev, { role: 'assistant', text: ans.answer, meta: ans }]);
+    } catch (e) {
+      setMessages(prev => [...prev, { role: 'assistant', text: `Backend error: ${e.message}. Make sure backend is running and a Knowledge PDF is processed.`, error: true, meta: null }]);
+    } finally { setIsSynthesizing(false); }
+  };
+
+  const handleSubmit = (e) => { e.preventDefault(); ask(query); };
+
+  return (
+    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full w-full">
+      <div className="bg-[#F5F7FA] px-5 py-3 border-b-2 border-slate-200 flex items-center space-x-3"><div className="p-2 bg-emerald-500 text-white rounded-xl shadow-sm"><Bot size={16} strokeWidth={2.5}/></div><div><h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Local RAG Doubt Solver</h3><p className="text-[10px] text-slate-500 font-bold mt-0.5">Source-grounded answers from uploaded PDF</p></div></div>
+      <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-[#F5F7FA]">
+        {messages.map((m, i) => <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`max-w-[88%] rounded-2xl px-5 py-4 text-sm leading-relaxed ${m.role === 'user' ? 'bg-emerald-500 text-white font-bold shadow-[0_4px_12px_rgba(16,185,129,0.25)]' : m.error ? 'bg-white text-rose-600 border-2 border-rose-100 font-bold shadow-sm' : 'bg-white text-slate-800 border-2 border-slate-100 font-medium shadow-sm'}`}>{m.role === 'assistant' && <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-2"><Bot size={12} strokeWidth={2.5}/>RAG Answer</div>}{m.role === 'user' && <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-100 mb-2"><User size={12} strokeWidth={2.5}/>You</div>}<p className="whitespace-pre-line">{m.text}</p>{m.role === 'assistant' && (onWatchVideo || onPracticeTest || onVisualize || onSimulator || onDiagram) && <div className="mt-4 pt-4 border-t-2 border-slate-100 flex flex-col gap-2.5"><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recommended Next Actions</span><div className="flex flex-wrap gap-2 pt-1">{onWatchVideo && <button onClick={onWatchVideo} className="flex items-center space-x-1 px-3 py-1.5 bg-white border-2 border-slate-200 rounded-full text-[10px] font-black uppercase text-slate-700 hover:border-emerald-500 hover:text-emerald-600 hover:-translate-y-0.5 transition-all shadow-sm active:translate-y-0"><PlayCircle size={12} strokeWidth={2.5}/>Video</button>}{onVisualize && <button onClick={onVisualize} className="flex items-center space-x-1 px-3 py-1.5 bg-white border-2 border-slate-200 rounded-full text-[10px] font-black uppercase text-slate-700 hover:border-blue-500 hover:text-blue-600 hover:-translate-y-0.5 transition-all shadow-sm active:translate-y-0"><Cpu size={12} strokeWidth={2.5}/>Visualize</button>}{onSimulator && <button onClick={onSimulator} className="flex items-center space-x-1 px-3 py-1.5 bg-white border-2 border-slate-200 rounded-full text-[10px] font-black uppercase text-slate-700 hover:border-purple-500 hover:text-purple-600 hover:-translate-y-0.5 transition-all shadow-sm active:translate-y-0"><LayoutTemplate size={12} strokeWidth={2.5}/>Simulator</button>}{onDiagram && <button onClick={onDiagram} className="flex items-center space-x-1 px-3 py-1.5 bg-white border-2 border-slate-200 rounded-full text-[10px] font-black uppercase text-slate-700 hover:border-indigo-500 hover:text-indigo-600 hover:-translate-y-0.5 transition-all shadow-sm active:translate-y-0"><Hand size={12} strokeWidth={2.5}/>Diagram</button>}{onPracticeTest && <button onClick={onPracticeTest} className="flex items-center space-x-1 px-3 py-1.5 bg-white border-2 border-slate-200 rounded-full text-[10px] font-black uppercase text-slate-700 hover:border-emerald-500 hover:text-emerald-600 hover:-translate-y-0.5 transition-all shadow-sm active:translate-y-0"><PenTool size={12} strokeWidth={2.5}/>Practice</button>}</div></div>}</div></div>)}
+        {isSynthesizing && <div className="flex items-center space-x-3 bg-white p-4 rounded-2xl border-2 border-slate-100 shadow-sm max-w-[280px]"><div className="flex space-x-1.5"><span className="h-2.5 w-2.5 bg-emerald-500 rounded-full animate-bounce"></span><span className="h-2.5 w-2.5 bg-emerald-500 rounded-full animate-bounce" style={{animationDelay:'150ms'}}></span><span className="h-2.5 w-2.5 bg-emerald-500 rounded-full animate-bounce" style={{animationDelay:'300ms'}}></span></div><span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Thinking with local RAG...</span></div>}
+      </div>
+      <div className="px-5 py-3 bg-[#F5F7FA] border-t-2 border-slate-200 flex gap-2.5 overflow-x-auto"><button onClick={() => ask('Explain this topic in simple exam language')} className="text-[11px] font-black bg-white border-2 border-slate-200 hover:border-emerald-500 hover:text-emerald-600 px-4 py-1.5 rounded-full whitespace-nowrap transition-all shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:shadow-none text-slate-700">Explain topic</button><button onClick={() => ask('Give important formulas from this chapter')} className="text-[11px] font-black bg-white border-2 border-slate-200 hover:border-emerald-500 hover:text-emerald-600 px-4 py-1.5 rounded-full whitespace-nowrap transition-all shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:shadow-none text-slate-700">Important formulas</button><button onClick={() => ask('Give 5 marks answer points from this topic')} className="text-[11px] font-black bg-white border-2 border-slate-200 hover:border-emerald-500 hover:text-emerald-600 px-4 py-1.5 rounded-full whitespace-nowrap transition-all shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:shadow-none text-slate-700">5 marks answer</button></div>
+      <form onSubmit={handleSubmit} className="p-4 bg-white border-t-2 border-slate-200 flex items-center space-x-3"><input type="text" value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Ask from uploaded PDF..." className="flex-1 bg-[#F5F7FA] hover:bg-slate-100 focus:bg-white border-2 border-slate-200 focus:border-emerald-500 rounded-2xl px-5 py-3.5 text-sm text-slate-900 outline-none font-bold transition-all shadow-sm placeholder:text-slate-400 placeholder:font-semibold focus:shadow-[0_0_0_4px_rgba(16,185,129,0.15)]"/><button type="submit" disabled={isSynthesizing} className="p-3.5 bg-emerald-500 text-white rounded-2xl shadow-[0_4px_0_rgb(4,120,87)] hover:bg-emerald-400 hover:-translate-y-0.5 active:translate-y-1 active:shadow-none transition-all disabled:opacity-50 disabled:shadow-none"><Send size={18} strokeWidth={2.5} /></button></form>
+    </div>
+  );
+};
+export default RAGChatBox;

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interactive Full-Wave Rectifier</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#eef4ff,#f8fbff);color:#17233d}.app{max-width:1200px;margin:auto;padding:24px}.hero{background:#fff;border-radius:24px;padding:24px;box-shadow:0 14px 40px #17386b18;margin-bottom:20px}.hero h1{margin:0;font-size:34px}.tag{display:inline-block;margin-top:8px;background:#e9edff;color:#4338ca;padding:7px 12px;border-radius:999px;font-weight:700;font-size:13px}.grid{display:grid;grid-template-columns:1.4fr .9fr;gap:20px}.card{background:#fff;border-radius:22px;padding:20px;box-shadow:0 14px 40px #17386b14;border:1px solid #e8eefb}.stage{position:relative;min-height:530px;overflow:hidden}.circuit{width:100%;height:330px}.label{font-size:14px;font-weight:800;fill:#17233d}.small{font-size:12px;fill:#64748b}.wire{stroke:#1e293b;stroke-width:4;fill:none;stroke-linecap:round}.activeWire{stroke:#22c55e;stroke-width:6;filter:drop-shadow(0 0 5px #22c55e)}.blocked{stroke:#ef4444;stroke-width:5}.diodeBody{fill:#f8fafc;stroke:#334155;stroke-width:3}.diodeOn{fill:#dcfce7;stroke:#16a34a;filter:drop-shadow(0 0 8px #22c55e)}.diodeOff{fill:#fee2e2;stroke:#dc2626}.dot{fill:#22c55e;opacity:0}.dot.run{animation:flow 1.4s linear infinite;opacity:1}@keyframes flow{0%{offset-distance:0%}100%{offset-distance:100%}}.waveBox{height:180px;border:1px solid #e5e7eb;border-radius:18px;background:#f8fafc;padding:12px;margin-top:14px}.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:14px;padding:12px 16px;font-weight:800;cursor:pointer;background:#4f46e5;color:white;box-shadow:0 8px 18px #4f46e533}button.secondary{background:#eef2ff;color:#3730a3;box-shadow:none}button.green{background:#16a34a}.steps{display:flex;flex-direction:column;gap:10px}.stepItem{padding:13px;border-radius:16px;background:#f8fafc;border:1px solid #e5e7eb;font-weight:700;color:#64748b}.stepItem.active{background:#eef2ff;color:#4338ca;border-color:#a5b4fc}.explain h2{margin:0 0 8px}.big{font-size:22px;font-weight:900;color:#111827}.easy{font-size:16px;line-height:1.65;color:#334155}.exam{background:#f8fafc;border-left:5px solid #4f46e5;padding:14px;border-radius:14px;margin-top:12px}.clickables{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}.chip{padding:12px;border-radius:14px;background:#f1f5f9;border:1px solid #dbe3ef;cursor:pointer;font-weight:800}.chip:hover{background:#e0e7ff}.popup{margin-top:12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:13px;color:#7c2d12;min-height:60px}.quiz{margin-top:18px}.option{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border-radius:12px;background:#f8fafc;border:1px solid #e5e7eb;color:#17233d;box-shadow:none}.correct{background:#dcfce7!important;border-color:#22c55e!important}.wrong{background:#fee2e2!important;border-color:#ef4444!important}.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.pill{padding:8px 10px;border-radius:999px;background:#f1f5f9;font-size:13px;font-weight:800}@media(max-width:900px){.grid{grid-template-columns:1fr}.hero h1{font-size:26px}.stage{min-height:auto}.clickables{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hero">
+    <h1>Full-Wave Rectifier: Click & Learn Working</h1>
+    <div class="tag">Interactive visual explanation for students</div>
+    <p class="easy">A full-wave rectifier converts both positive and negative half cycles of AC into one-direction pulsating DC. This demo shows what happens step by step.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card stage">
+      <svg class="circuit" viewBox="0 0 900 360">
+        <defs>
+          <path id="pathD1" d="M175 110 L300 110 L405 110 L555 110 L705 180"/>
+          <path id="pathD2" d="M175 250 L300 250 L405 250 L555 250 L705 180"/>
+        </defs>
+        <text x="35" y="30" class="label">Centre-Tap Transformer</text>
+        <path class="wire" d="M80 95 Q130 60 180 95 Q230 130 280 95" />
+        <path class="wire" d="M80 265 Q130 230 180 265 Q230 300 280 265" />
+        <line class="wire" x1="300" y1="110" x2="385" y2="110" />
+        <line class="wire" x1="300" y1="250" x2="385" y2="250" />
+        <line class="wire" x1="180" y1="180" x2="705" y2="180" />
+        <text x="150" y="176" class="small">Centre tap</text>
+
+        <g id="d1">
+          <polygon class="diodeBody" points="405,85 405,135 455,110"/>
+          <line class="wire" x1="463" y1="85" x2="463" y2="135"/>
+          <text x="408" y="70" class="label">D1</text>
+        </g>
+        <g id="d2">
+          <polygon class="diodeBody" points="405,225 405,275 455,250"/>
+          <line class="wire" x1="463" y1="225" x2="463" y2="275"/>
+          <text x="408" y="315" class="label">D2</text>
+        </g>
+        <line class="wire" x1="463" y1="110" x2="705" y2="180"/>
+        <line class="wire" x1="463" y1="250" x2="705" y2="180"/>
+        <rect x="705" y="120" width="55" height="120" rx="10" fill="#fff" stroke="#334155" stroke-width="4"/>
+        <text x="710" y="112" class="label">RL</text>
+        <line class="wire" x1="732" y1="240" x2="732" y2="300"/>
+        <line class="wire" x1="732" y1="300" x2="180" y2="300"/>
+        <line class="wire" x1="180" y1="300" x2="180" y2="180"/>
+        <text x="775" y="180" class="label">Output</text>
+        <text id="polarityA" x="310" y="95" class="label">A +</text>
+        <text id="polarityB" x="310" y="275" class="label">B -</text>
+        <path id="active1" class="activeWire" d="M300 110 L405 110 L463 110 L705 180 L732 240 L732 300 L180 300 L180 180" opacity="0"/>
+        <path id="active2" class="activeWire" d="M300 250 L405 250 L463 250 L705 180 L732 240 L732 300 L180 300 L180 180" opacity="0"/>
+        <circle id="dot1" r="8" class="dot" style="offset-path:path('M300 110 L405 110 L463 110 L705 180 L732 240 L732 300 L180 300 L180 180')"/>
+        <circle id="dot2" r="8" class="dot" style="offset-path:path('M300 250 L405 250 L463 250 L705 180 L732 240 L732 300 L180 300 L180 180')"/>
+      </svg>
+
+      <div class="waveBox">
+        <canvas id="wave" width="850" height="150" style="width:100%;height:150px"></canvas>
+      </div>
+
+      <div class="legend">
+        <span class="pill">Green path = current flows</span>
+        <span class="pill">Red diode = blocked</span>
+        <span class="pill">Output is always same direction</span>
+      </div>
+
+      <div class="controls">
+        <button onclick="prevStep()">Previous</button>
+        <button onclick="nextStep()">Next</button>
+        <button class="green" onclick="autoPlay()">Auto Play</button>
+        <button class="secondary" onclick="resetDemo()">Reset</button>
+      </div>
+    </div>
+
+    <div class="card explain">
+      <div class="big" id="stepTitle">Step 1: Circuit Setup</div>
+      <p class="easy" id="stepText">A full-wave rectifier uses two diodes and a centre-tap transformer. It converts both halves of AC into pulsating DC.</p>
+      <div class="exam" id="examText"><b>Board answer:</b> A full-wave rectifier converts both positive and negative half cycles of AC into unidirectional pulsating output.</div>
+
+      <h3>Clickable Concepts</h3>
+      <div class="clickables">
+        <div class="chip" onclick="info('transformer')">Transformer</div>
+        <div class="chip" onclick="info('diodes')">D1 & D2</div>
+        <div class="chip" onclick="info('load')">Load RL</div>
+        <div class="chip" onclick="info('wave')">Output Wave</div>
+      </div>
+      <div class="popup" id="popup">Click any concept to understand its role.</div>
+
+      <h3>Learning Steps</h3>
+      <div class="steps" id="steps"></div>
+
+      <div class="quiz">
+        <h3>Quick Check</h3>
+        <p><b>In a full-wave rectifier, output is obtained during:</b></p>
+        <button class="option" onclick="check(this,false)">Only positive half cycle</button>
+        <button class="option" onclick="check(this,false)">Only negative half cycle</button>
+        <button class="option" onclick="check(this,true)">Both positive and negative half cycles</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const data=[
+{t:'Step 1: Circuit Setup',x:'A full-wave rectifier has a centre-tap transformer, two diodes D1 and D2, and load resistor RL. Output is taken across RL.',e:'A full-wave rectifier uses two diodes with a centre-tap transformer to get rectified output for both halves of AC.',mode:0},
+{t:'Step 2: Positive Half Cycle',x:'When terminal A is positive with respect to centre tap, diode D1 becomes forward biased and conducts. Diode D2 becomes reverse biased and blocks.',e:'During positive half cycle, D1 conducts and D2 does not conduct.',mode:1},
+{t:'Step 3: Current Through D1',x:'Current flows through D1, then through the load resistor RL, and returns through the centre tap. Output voltage appears across RL.',e:'The current through RL produces output voltage during the positive half cycle.',mode:1},
+{t:'Step 4: Negative Half Cycle',x:'Now terminal B becomes positive with respect to centre tap. Diode D2 becomes forward biased and conducts. Diode D1 blocks.',e:'During negative half cycle, D2 conducts and D1 does not conduct.',mode:2},
+{t:'Step 5: Current Through D2',x:'Even though the input half cycle is negative, current through RL still flows in the same direction as before. That is why output is unidirectional.',e:'In both half cycles, current through load RL is in the same direction.',mode:2},
+{t:'Step 6: Full-Wave Output',x:'Both halves of AC are used. So output has more pulses than half-wave rectifier and is more efficient.',e:'Full-wave rectifier gives output during both halves of the input AC cycle, so it is more efficient than half-wave rectifier.',mode:3},
+{t:'Step 7: Filter Idea',x:'The output is still pulsating DC. A capacitor can be connected across RL to smooth the pulses and get nearly steady DC.',e:'A capacitor filter reduces ripple and makes the rectified output smoother.',mode:4}
+];
+let i=0,timer=null;
+function render(){let s=data[i];document.getElementById('stepTitle').innerText=s.t;document.getElementById('stepText').innerText=s.x;document.getElementById('examText').innerHTML='<b>Board answer:</b> '+s.e;document.getElementById('steps').innerHTML=data.map((d,k)=>`<div class="stepItem ${k===i?'active':''}">${k+1}. ${d.t.replace('Step '+(k+1)+': ','')}</div>`).join('');setCircuit(s.mode);drawWave(s.mode)}
+function setCircuit(m){['active1','active2'].forEach(id=>document.getElementById(id).setAttribute('opacity','0'));['dot1','dot2'].forEach(id=>document.getElementById(id).classList.remove('run'));document.querySelector('#d1 polygon').setAttribute('class','diodeBody');document.querySelector('#d2 polygon').setAttribute('class','diodeBody');document.getElementById('polarityA').textContent='A +';document.getElementById('polarityB').textContent='B -'; if(m===1){document.getElementById('active1').setAttribute('opacity','1');document.getElementById('dot1').classList.add('run');document.querySelector('#d1 polygon').setAttribute('class','diodeBody diodeOn');document.querySelector('#d2 polygon').setAttribute('class','diodeBody diodeOff');}
+ if(m===2){document.getElementById('polarityA').textContent='A -';document.getElementById('polarityB').textContent='B +';document.getElementById('active2').setAttribute('opacity','1');document.getElementById('dot2').classList.add('run');document.querySelector('#d2 polygon').setAttribute('class','diodeBody diodeOn');document.querySelector('#d1 polygon').setAttribute('class','diodeBody diodeOff');}
+ if(m===3||m===4){document.getElementById('active1').setAttribute('opacity','.65');document.getElementById('active2').setAttribute('opacity','.65');document.querySelector('#d1 polygon').setAttribute('class','diodeBody diodeOn');document.querySelector('#d2 polygon').setAttribute('class','diodeBody diodeOn');}}
+function drawWave(m){const c=document.getElementById('wave'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);ctx.lineWidth=2;ctx.strokeStyle='#cbd5e1';ctx.beginPath();ctx.moveTo(30,75);ctx.lineTo(820,75);ctx.stroke();function plot(fn,color,yoff,label){ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();for(let x=0;x<760;x++){let y=yoff-fn(x/760*4*Math.PI)*38;if(x===0)ctx.moveTo(x+50,y);else ctx.lineTo(x+50,y)}ctx.stroke();ctx.fillStyle=color;ctx.font='bold 14px Arial';ctx.fillText(label,50,yoff-45)}plot(Math.sin,'#3b82f6',55,'Input AC');let out=x=>Math.abs(Math.sin(x)); if(m===1)out=x=>Math.sin(x)>0?Math.sin(x):0;if(m===2)out=x=>Math.sin(x)<0?-Math.sin(x):0;if(m===4)out=x=>0.75+0.15*Math.sin(2*x);plot(out,'#16a34a',120,m===4?'Filtered DC Output':'Full-wave Rectified Output')}
+function nextStep(){i=(i+1)%data.length;render()}function prevStep(){i=(i-1+data.length)%data.length;render()}function resetDemo(){i=0;clearInterval(timer);timer=null;render()}function autoPlay(){clearInterval(timer);timer=setInterval(nextStep,2200)}
+function info(type){const p={transformer:'The centre-tap transformer gives two opposite AC voltages: one at A and one at B. This helps two diodes conduct alternately.',diodes:'D1 conducts in the positive half cycle. D2 conducts in the negative half cycle. They act like one-way gates.',load:'RL is the load resistor. The useful output voltage is taken across this resistor.',wave:'Input AC has positive and negative halves. Full-wave rectifier turns both halves into positive pulses.'};document.getElementById('popup').innerText=p[type]}
+function check(btn,ok){document.querySelectorAll('.option').forEach(b=>b.classList.remove('correct','wrong'));btn.classList.add(ok?'correct':'wrong')}
+render();
+</script>
+</body>
+</html>
